@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>한결물산 · 사내 포털</title>
+<style>
+:root{--bg:#e8ebf0;--ink:#1c2430;--sub:#7b8594;--line:#e6e9ee;--blue:#2f5bd8;--red:#e5484d;--navy:#1f2a44;--card:#f6f8fb}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;color:var(--ink);display:flex;justify-content:center;align-items:center}
+.phone{position:relative;width:min(100vw,420px);height:min(100dvh,860px);background:#fff;overflow:hidden;display:flex;flex-direction:column}
+@media(min-width:460px){.phone{border-radius:28px;box-shadow:0 20px 60px rgba(20,30,50,.2)}}
+.top{background:var(--navy);color:#fff;padding:16px 18px 14px;display:flex;justify-content:space-between;align-items:center}
+.top b{font-size:15px;letter-spacing:.2px}
+.top span{font-size:12px;opacity:.7}
+.pane{flex:1;overflow-y:auto;display:none}
+.pane.on{display:block}
+.tabbar{display:flex;border-top:1px solid var(--line);background:#fff;padding:8px 0 12px}
+.tabbar div{flex:1;text-align:center;font-size:11px;color:#98a1ae;cursor:pointer;position:relative}
+.tabbar div b{display:block;font-size:19px;font-weight:400;margin-bottom:2px}
+.tabbar .on{color:var(--navy);font-weight:700}
+.tabbar .dot{position:absolute;top:-2px;left:58%;background:var(--red);color:#fff;border-radius:9px;min-width:17px;height:17px;font-size:10px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+/* 메신저 목록 */
+.row{display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);cursor:pointer}
+.row:active{background:#f3f5f8}
+.av{flex:none;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;position:relative;overflow:hidden}
+.av.sm{width:34px;height:34px;font-size:13px}
+.r-mid{flex:1;min-width:0}
+.r-name{font-size:14.5px;font-weight:700;display:flex;gap:6px;align-items:center}
+.r-prev{font-size:12.5px;color:var(--sub);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r-end{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:11px;color:var(--sub)}
+.badge{background:var(--red);color:#fff;border-radius:10px;min-width:19px;height:19px;padding:0 6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.tag{font-size:10px;font-weight:600;background:#eef1f6;color:#5a6577;padding:2px 6px;border-radius:5px}
+
+/* 채팅방 */
+.room{position:absolute;inset:0;background:#f4f6fa;display:flex;flex-direction:column;z-index:3}
+.hidden{display:none!important}
+.c-head{display:flex;align-items:center;gap:10px;padding:14px 14px 12px;background:#fff;border-bottom:1px solid var(--line)}
+.c-head .back{font-size:22px;cursor:pointer;padding:0 6px}
+.c-head .nm{font-size:16px;font-weight:700}
+.c-head .ss{font-size:11px;color:var(--sub)}
+.body{flex:1;overflow-y:auto;padding:8px 12px 14px}
+.div{display:flex;justify-content:center;margin:12px 0 8px}
+.div span{font-size:11px;color:var(--sub);background:#e9edf3;padding:3px 10px;border-radius:10px}
+.grp{display:flex;margin-top:6px}
+.grp.me{justify-content:flex-end}
+.col{display:flex;flex-direction:column;gap:4px;max-width:74%}
+.grp.me .col{align-items:flex-end}
+.who{font-size:11.5px;color:var(--sub);margin:0 0 1px 2px}
+.line{display:flex;align-items:flex-end;gap:5px}
+.grp.me .line{flex-direction:row-reverse}
+.bub{padding:9px 12px;border-radius:12px;font-size:14px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.them .bub{background:#fff;border:1px solid var(--line);border-top-left-radius:3px}
+.me .bub{background:var(--blue);color:#fff;border-top-right-radius:3px}
+.meta{font-size:10.5px;color:var(--sub);display:flex;flex-direction:column;align-items:flex-start}
+.grp.me .meta{align-items:flex-end}
+.rd{color:var(--blue);font-weight:700}
+.avw{width:34px;margin-right:8px;flex:none}
+.typing{display:flex;margin-top:8px}
+.typing .bub{display:flex;gap:4px;padding:12px 14px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#9aa4b2;display:block;animation:bn 1.1s infinite ease-in-out}
+.typing i:nth-child(2){animation-delay:.18s}.typing i:nth-child(3){animation-delay:.36s}
+@keyframes bn{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.pop{animation:pop .22s ease-out}
+@keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+.input{display:flex;align-items:center;gap:8px;padding:8px 10px 14px;background:#fff;border-top:1px solid var(--line)}
+.fake{flex:1;min-height:38px;background:#f1f3f7;border-radius:10px;padding:9px 12px;font-size:14px;display:flex;align-items:center;white-space:nowrap;overflow:hidden}
+.fake .cur{display:inline-block;width:1.5px;height:16px;background:#333;margin-left:1px;animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.send{flex:none;width:36px;height:36px;border-radius:10px;background:#e5e9f0;color:#a2abb8;display:flex;align-items:center;justify-content:center;font-size:16px;transition:.15s}
+.send.on{background:var(--blue);color:#fff}
+
+/* 실적 */
+.pad{padding:16px}
+.h{font-size:12px;color:var(--sub);margin:4px 2px 8px;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.big{font-size:34px;font-weight:800;letter-spacing:-1px}
+.big small{font-size:15px;font-weight:600;color:var(--sub);margin-left:4px}
+.bar{height:10px;border-radius:5px;background:#e4e8ef;margin:12px 0 6px;position:relative;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red);border-radius:5px;width:0;transition:width 1.2s ease}
+.bar u{position:absolute;top:-2px;bottom:-2px;width:2px;background:#1c2430;opacity:.5}
+.cap{display:flex;justify-content:space-between;font-size:11.5px;color:var(--sub)}
+.two{display:flex;gap:12px}
+.two .card{flex:1;margin-bottom:12px}
+.k{font-size:11.5px;color:var(--sub)}
+.v{font-size:22px;font-weight:800;margin-top:4px}
+.v.r{color:var(--red)}
+.deal{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.deal:last-child{border:0}
+.st{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px}
+.st.ok{background:#e4f5ea;color:#1f8a4c}.st.wait{background:#fdecec;color:#c93a3f}.st.ing{background:#e9effd;color:#2f5bd8}
+
+/* 공지 */
+.post{padding:16px;border-bottom:1px solid var(--line)}
+.post h3{font-size:15px;line-height:1.4;margin-bottom:6px}
+.post .m{font-size:11.5px;color:var(--sub);margin-bottom:10px}
+.post p{font-size:13.5px;line-height:1.65;color:#38414f}
+.post ul{margin:8px 0 0 18px;font-size:13.5px;line-height:1.7;color:#38414f}
+.new{background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;margin-right:6px;vertical-align:middle}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="top"><b>한결물산 · 사내 포털</b><span>영업2팀 도은제 대리</span></div>
+
+  <div class="pane on" id="p-msg"><div id="list"></div></div>
+
+  <div class="pane" id="p-perf"><div class="pad">
+    <div class="h">이번 분기 개인 실적</div>
+    <div class="card">
+      <div class="big">78<small>% 달성</small></div>
+      <div class="bar"><i id="barfill"></i><u style="left:100%"></u></div>
+      <div class="cap"><span>목표 대비</span><span>분기 마감 D-12</span></div>
+    </div>
+    <div class="two">
+      <div class="card"><div class="k">팀 내 순위</div><div class="v">3<span style="font-size:14px;color:var(--sub);font-weight:600"> / 9</span></div></div>
+      <div class="card"><div class="k">남은 금액</div><div class="v r">2.4억</div></div>
+    </div>
+    <div class="h">진행 중인 거래</div>
+    <div class="card" style="padding:4px 16px">
+      <div class="deal"><span>B사 연간 납품</span><span class="st ok">체결</span></div>
+      <div class="deal"><span>C사 신규 제안</span><span class="st ing">진행</span></div>
+      <div class="deal"><span>A사 재계약</span><span class="st wait">보류</span></div>
+    </div>
+  </div></div>
+
+  <div class="pane" id="p-note">
+    <div class="post"><h3><span class="new">NEW</span>[인사] 2026 하반기 과장 승진 심사 일정 안내</h3><div class="m">인사팀 · 공지</div>
+      <p>하반기 과장 승진 심사를 아래와 같이 진행합니다.</p>
+      <ul><li>심사 대상: 대리 3년차 이상</li><li>평가 기준: 분기 실적 및 직무 기여도</li><li>결과 발표: 연말 예정</li></ul>
+      <p style="margin-top:10px;color:#7b8594;font-size:12.5px">※ 승진자는 직무 재배치 대상에 포함될 수 있습니다.</p></div>
+    <div class="post"><h3>[영업본부] 연말 영업 집중 기간 운영 안내</h3><div class="m">영업본부 · 공지</div>
+      <p>연말 영업 집중 기간 중 연차 사용은 부서장과 사전 협의 후 진행해 주시기 바랍니다.</p></div>
+    <div class="post"><h3>[총무] 12월 사내 주차 정산 안내</h3><div class="m">총무팀 · 공지</div>
+      <p>월 정산 마감은 매월 25일입니다.</p></div>
+  </div>
+
+  <div class="tabbar">
+    <div class="on" data-t="msg"><b>💬</b>메신저<span class="dot" id="dotm">51</span></div>
+    <div data-t="perf"><b>📊</b>실적</div>
+    <div data-t="note"><b>📌</b>공지<span class="dot">1</span></div>
+  </div>
+
+  <div class="room hidden" id="room">
+    <div class="c-head"><span class="back" id="back">‹</span><div><div class="nm" id="rn"></div><div class="ss" id="rs"></div></div></div>
+    <div class="body" id="body"></div>
+    <div class="input"><div class="fake" id="fake"></div><div class="send" id="send">↑</div></div>
+  </div>
+</div>
+
+<script>
+/* ===== 여기만 고치세요 ===== */
+const USER = "{{user}}";   // 외부 페이지는 치환되지 않으니 원하는 호칭으로 바꾸세요
+const IMG = {};            // 사진을 쓰려면 { user:"user.png", boss:"boss.png" } 처럼 파일 이름을 넣으세요
+
+const CHATS = [
+ { id:"team", name:"영업2팀", sub:"9명", tag:"단톡", color:"#5b7cc4", init:"팀", time:"오후 11:38", badge:48,
+   msgs:[
+    {d:"오늘"},
+    {w:"them",n:"박상진 팀장",t:"[공지] 금일 중 주간 실적 현황 업데이트 바랍니다.",tm:"오후 6:02"},
+    {w:"them",n:"김 사원",t:"넵 확인했습니다!",tm:"오후 6:05"},
+    {w:"them",n:"이 주임",t:"저도 올리겠습니다.",tm:"오후 6:20"},
+    {w:"me",t:"확인했습니다. 곧 올리겠습니다.",tm:"오후 6:41",rd:true},
+    {w:"them",n:"박상진 팀장",t:"A사 건, 내일 오전까지 상황 정리해서 공유해 주세요.",tm:"오후 11:38"}
+   ]},
+ { id:"boss", name:"박상진 팀장", sub:"영업2팀", tag:"", color:"#3d4f6b", init:"박", time:"오후 11:42", badge:1, typingEnd:true,
+   msgs:[
+    {w:"them",n:"박상진 팀장",t:"도 대리, A사 건 어떻게 됐어요?",tm:"오후 9:10"},
+    {w:"me",t:"내일 오전 중에 다시 연락 주기로 했습니다.",tm:"오후 9:14",rd:false},
+    {w:"them",n:"박상진 팀장",t:"그쪽이 보류면 이번 분기 숫자가 애매해지는 거 알죠?",tm:"오후 9:15"},
+    {w:"me",t:"네, 알고 있습니다.",tm:"오후 9:16"},
+    {w:"them",n:"박상진 팀장",t:"승진 심사 전에 정리해 둡시다. 이런 기회가 자주 오는 게 아니라서.",tm:"오후 9:18"},
+    {w:"me",t:"네. 내일까지 정리해서 올리겠습니다.",tm:"오후 9:20"},
+    {w:"them",n:"박상진 팀장",t:"그래요. 월요일 오전에 보고 잡아 놨어요.",tm:"오후 11:42"}
+   ]},
+ { id:"user", name:"{u}", sub:"", tag:"", color:"#8fa6c4", init:"♡", time:"어제", badge:3, finale:true,
+   msgs:[
+    {d:"어제"},
+    {w:"them",n:"{u}",t:"오늘 저녁 괜찮아?",tm:"오후 5:48"},
+    {w:"them",n:"{u}",t:"답 늦어도 괜찮아. 일 끝나면 말해줘",tm:"오후 5:49"},
+    {w:"them",n:"{u}",t:"…요즘 많이 힘들어?",tm:"오후 10:31"}
+   ]},
+ { id:"client", name:"A사 구매팀 서 부장", sub:"외부", tag:"외부", color:"#8a8f98", init:"A", time:"오후 4:10", badge:0,
+   msgs:[
+    {w:"them",n:"서 부장",t:"도 대리님, 내부 검토가 길어지고 있어서요. 이번 주는 어려울 것 같습니다.",tm:"오후 4:02"},
+    {w:"me",t:"네, 알겠습니다. 다음 주 초에 다시 연락드리겠습니다.",tm:"오후 4:10",rd:true}
+   ]}
+];
+/* ========================== */
+
+const $=s=>document.querySelector(s);
+const T=s=>s.replaceAll("{u}",USER);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const esc=s=>s.replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
+let token=0;
+const pic=o=>IMG[o.id]?`<img src="${IMG[o.id]}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.remove()">`:"";
+const avatar=(o,sm)=>`<div class="av ${sm?"sm":""}" style="background:${o.color}">${pic(o)}${o.init}</div>`;
+
+function renderList(){
+  $("#list").innerHTML=CHATS.map(c=>{
+    const last=[...c.msgs].reverse().find(m=>m.t);
+    return `<div class="row" data-id="${c.id}">${avatar(c)}<div class="r-mid"><div class="r-name">${T(c.name)}${c.tag?`<span class="tag">${c.tag}</span>`:""}</div><div class="r-prev">${last?esc(T(last.t)):""}</div></div><div class="r-end"><span>${c.time}</span>${c.badge?`<span class="badge">${c.badge}</span>`:""}</div></div>`;
+  }).join("");
+  document.querySelectorAll(".row").forEach(r=>r.onclick=()=>openRoom(r.dataset.id));
+}
+
+function grpHTML(c,g){
+  const me=g.w==="me";
+  const lines=g.items.map((m,i)=>{
+    const last=i===g.items.length-1;
+    const meta=last?`<div class="meta">${m.rd?`<span class="rd">읽음</span>`:""}<span>${m.tm||""}</span></div>`:"";
+    return `<div class="line"><div class="bub">${esc(T(m.t))}</div>${meta}</div>`;
+  }).join("");
+  const av=me?"":`<div class="avw">${avatar(c,true)}</div>`;
+  const who=(!me&&g.items[0].n)?`<div class="who">${T(g.items[0].n)}</div>`:"";
+  return `<div class="grp ${me?"me":"them"}">${av}<div class="col">${who}${lines}</div></div>`;
+}
+function renderMsgs(c){
+  let cur=null,h="";
+  const fl=()=>{if(cur){h+=grpHTML(c,cur);cur=null}};
+  c.msgs.forEach(m=>{
+    if(m.d){fl();h+=`<div class="div"><span>${m.d}</span></div>`;return}
+    if(!cur||cur.w!==m.w||(m.w==="them"&&cur.items[0].n!==m.n)){fl();cur={w:m.w,items:[]}}
+    cur.items.push(m);
+  });
+  fl(); $("#body").innerHTML=h; $("#body").scrollTop=1e6;
+}
+function typingEl(c){
+  const d=document.createElement("div"); d.className="typing pop";
+  d.innerHTML=`<div class="avw">${avatar(c,true)}</div><div class="bub"><i></i><i></i><i></i></div>`;
+  return d;
+}
+function setInput(t){ $("#fake").innerHTML=esc(t)+`<span class="cur"></span>`; $("#send").classList.toggle("on",t.length>0); }
+
+function openRoom(id){
+  const c=CHATS.find(x=>x.id===id), my=++token;
+  $("#rn").textContent=T(c.name); $("#rs").textContent=c.sub||"";
+  $("#room").classList.remove("hidden"); renderMsgs(c); setInput("");
+  if(c.typingEnd){ $("#body").appendChild(typingEl(c)); $("#body").scrollTop=1e6; }
+  if(c.finale) finale(c,my);
+}
+$("#back").onclick=()=>{token++;$("#room").classList.add("hidden")};
+
+/* {{user}} 방: 읽지 않은 메시지 앞에서 답을 쓰다가 지운다. 보내지는 않는다 */
+async function finale(c,my){
+  const ok=()=>my===token, s0="미안, 오늘도 늦을 것 같";
+  await sleep(1500); if(!ok())return;
+  let s="";
+  for(const ch of s0){s+=ch;setInput(s);await sleep(95);if(!ok())return}
+  await sleep(1300); if(!ok())return;
+  while(s.length){s=s.slice(0,-1);setInput(s);await sleep(55);if(!ok())return}
+  await sleep(900); if(!ok())return;
+  const s1="내일 연락할게";
+  for(const ch of s1){s+=ch;setInput(s);await sleep(95);if(!ok())return}
+  await sleep(1200); if(!ok())return;
+  while(s.length){s=s.slice(0,-1);setInput(s);await sleep(55);if(!ok())return}
+  setInput("");
+}
+
+document.querySelectorAll(".tabbar div").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tabbar div").forEach(x=>x.classList.toggle("on",x===t));
+  document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id==="p-"+t.dataset.t));
+  if(t.dataset.t==="perf"){ const b=$("#barfill"); b.style.width="0"; setTimeout(()=>b.style.width="78%",60); }
+});
+
+renderList();
+</script>
+</body>
+</html>
