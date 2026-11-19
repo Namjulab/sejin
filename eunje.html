@@ -138,7 +138,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD
   </div>
 
   <div class="tabbar">
-    <div class="on" data-t="msg"><b>💬</b>메신저<span class="dot" id="dotm">51</span></div>
+    <div class="on" data-t="msg"><b>💬</b>메신저<span class="dot" id="dotm">49</span></div>
     <div data-t="perf"><b>📊</b>실적</div>
     <div data-t="note"><b>📌</b>공지<span class="dot">1</span></div>
   </div>
@@ -152,8 +152,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD
 
 <script>
 /* ===== 여기만 고치세요 ===== */
-const USER = "{{user}}";   // 외부 페이지는 치환되지 않으니 원하는 호칭으로 바꾸세요
-const IMG = {};            // 사진을 쓰려면 { user:"user.png", boss:"boss.png" } 처럼 파일 이름을 넣으세요
+const IMG = {};            // 사진을 쓰려면 { boss:"boss.png", memo:"memo.png" } 처럼 파일 이름을 넣으세요
 
 const CHATS = [
  { id:"team", name:"영업2팀", sub:"9명", tag:"단톡", color:"#5b7cc4", init:"팀", time:"오후 11:38", badge:48,
@@ -175,12 +174,14 @@ const CHATS = [
     {w:"me",t:"네. 내일까지 정리해서 올리겠습니다.",tm:"오후 9:20"},
     {w:"them",n:"박상진 팀장",t:"그래요. 월요일 오전에 보고 잡아 놨어요.",tm:"오후 11:42"}
    ]},
- { id:"user", name:"{u}", sub:"", tag:"", color:"#8fa6c4", init:"♡", time:"어제", badge:3, finale:true,
+ { id:"memo", name:"나에게 보내기", sub:"개인 메모", tag:"메모", color:"#6f7d91", init:"메", time:"오후 11:50", badge:0, finale:true,
    msgs:[
-    {d:"어제"},
-    {w:"them",n:"{u}",t:"오늘 저녁 괜찮아?",tm:"오후 5:48"},
-    {w:"them",n:"{u}",t:"답 늦어도 괜찮아. 일 끝나면 말해줘",tm:"오후 5:49"},
-    {w:"them",n:"{u}",t:"…요즘 많이 힘들어?",tm:"오후 10:31"}
+    {d:"고정 메모"},
+    {w:"me",t:"기억해 둘 날짜\n· 4월 23일 — 처음 사귄 날\n· 자기 생일 — 선물 미리 알아보기",tm:"오전 8:30"},
+    {d:"오늘"},
+    {w:"me",t:"기념일 저녁, 지난번 취소한 곳 다시 예약하기",tm:"오후 12:41"},
+    {w:"me",t:"휴가 신청서 — 보류",tm:"오후 3:05"},
+    {w:"me",t:"토요일 11시 집 보러 가기",tm:"오후 6:12"}
    ]},
  { id:"client", name:"A사 구매팀 서 부장", sub:"외부", tag:"외부", color:"#8a8f98", init:"A", time:"오후 4:10", badge:0,
    msgs:[
@@ -191,7 +192,7 @@ const CHATS = [
 /* ========================== */
 
 const $=s=>document.querySelector(s);
-const T=s=>s.replaceAll("{u}",USER);
+const T=s=>s;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const esc=s=>s.replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
 let token=0;
@@ -243,20 +244,22 @@ function openRoom(id){
 }
 $("#back").onclick=()=>{token++;$("#room").classList.add("hidden")};
 
-/* {{user}} 방: 읽지 않은 메시지 앞에서 답을 쓰다가 지운다. 보내지는 않는다 */
+/* 개인 메모방: 쓰다가 지우고, 다른 메모를 남긴다 */
 async function finale(c,my){
-  const ok=()=>my===token, s0="미안, 오늘도 늦을 것 같";
+  const ok=()=>my===token, s0="자기한테 다 솔직하게 말하기";
   await sleep(1500); if(!ok())return;
   let s="";
   for(const ch of s0){s+=ch;setInput(s);await sleep(95);if(!ok())return}
-  await sleep(1300); if(!ok())return;
-  while(s.length){s=s.slice(0,-1);setInput(s);await sleep(55);if(!ok())return}
+  await sleep(1400); if(!ok())return;
+  while(s.length){s=s.slice(0,-1);setInput(s);await sleep(50);if(!ok())return}
   await sleep(900); if(!ok())return;
-  const s1="내일 연락할게";
-  for(const ch of s1){s+=ch;setInput(s);await sleep(95);if(!ok())return}
-  await sleep(1200); if(!ok())return;
-  while(s.length){s=s.slice(0,-1);setInput(s);await sleep(55);if(!ok())return}
+  const s1="주말 시간 비우기";
+  for(const ch of s1){s+=ch;setInput(s);await sleep(100);if(!ok())return}
+  await sleep(700); if(!ok())return;
   setInput("");
+  const body=$("#body");
+  body.insertAdjacentHTML("beforeend",grpHTML(c,{w:"me",items:[{w:"me",t:s1,tm:"오후 11:50"}]}));
+  body.lastElementChild.classList.add("pop"); body.scrollTop=1e6;
 }
 
 document.querySelectorAll(".tabbar div").forEach(t=>t.onclick=()=>{
