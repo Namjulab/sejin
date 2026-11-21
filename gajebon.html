@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>제목 없는 가제본</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--kraft:#c9a27e;--kraft2:#b8906b;--thread:#7a2e22;--paper:#f6f1e7;--pencil:#45464d;--ghost:#a9a49a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#26231f radial-gradient(ellipse at 50% 30%,#3a342d,#1c1a17 70%);color:var(--pencil);font-family:"Nanum Myeongjo",serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px 16px;overflow:hidden;-webkit-user-select:none;user-select:none}
+.stage{perspective:1800px;width:min(92vw,380px);aspect-ratio:3/4.3;position:relative}
+.book{position:absolute;inset:0;transform-style:preserve-3d}
+.leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.45,.05,.2,1),filter 1s;backface-visibility:hidden;-webkit-backface-visibility:hidden;cursor:pointer}
+.leaf.turned{transform:rotateY(-178deg);pointer-events:none}
+.leaf.turning{filter:brightness(.92)}
+.page{position:absolute;inset:0;background:var(--paper);border-radius:2px 6px 6px 2px;box-shadow:0 18px 40px -14px rgba(0,0,0,.7),inset 24px 0 30px -24px rgba(90,60,30,.35);overflow:hidden;padding:34px 26px 30px 52px}
+.page::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 33px,rgba(120,140,170,.13) 33px 34px);background-position:0 70px;pointer-events:none}
+.page::after{content:"";position:absolute;left:30px;top:0;bottom:0;border-left:2px dotted rgba(122,46,34,.55)}
+.no{position:absolute;bottom:14px;right:22px;font-family:"Nanum Pen Script";font-size:18px;color:var(--ghost)}
+/* cover */
+.cover{background:var(--kraft) repeating-linear-gradient(90deg,transparent 0 6px,rgba(80,50,20,.07) 6px 7px);padding:0}
+.cover::before{display:none}
+.cover::after{left:0;width:46px;border-left:0;border-right:3px solid var(--thread);background:rgba(80,50,20,.1)}
+.threads{position:absolute;left:0;top:0;bottom:0;width:49px;display:flex;flex-direction:column;justify-content:space-evenly;z-index:2}
+.threads i{display:block;height:3px;background:var(--thread);box-shadow:0 1px 1px rgba(0,0,0,.25)}
+.blank{position:absolute;left:78px;top:34px;width:54px;height:170px;border:1px dashed rgba(90,60,30,.35);background:rgba(246,241,231,.25)}
+.hint{position:absolute;right:22px;bottom:20px;font-family:"Nanum Pen Script";font-size:20px;color:#5a3d22;opacity:.8}
+.back .hint{left:78px;right:auto}
+/* handwriting */
+.hand{font-family:"Nanum Pen Script",cursive;font-size:25px;line-height:34px;color:var(--pencil);position:relative}
+.date{font-family:"Nanum Pen Script";font-size:30px;color:#2e2f35;line-height:34px;margin-bottom:0}
+.small{font-size:21px;color:#6b6a68}
+.erase{position:relative;color:var(--ghost);filter:blur(.5px);display:inline}
+.erase::after{content:"";position:absolute;left:-6px;right:-6px;top:4px;bottom:2px;background:radial-gradient(ellipse at center,rgba(246,241,231,.75),rgba(246,241,231,.15) 70%,transparent);border-radius:40%}
+.strike{text-decoration:line-through;text-decoration-color:rgba(69,70,77,.8);text-decoration-thickness:2px}
+.heavy{color:#c3beb3;filter:blur(1.1px)}
+/* printed manuscript leftover */
+.print{position:relative;margin:4px 0 8px;padding:14px 14px 12px;background:#fffdf8;border:1px solid #e7dcc8;box-shadow:2px 3px 0 rgba(90,60,30,.08);transform:rotate(-.6deg)}
+.print b{display:block;font-size:9px;letter-spacing:3px;color:#a08a6a;margin-bottom:10px;font-weight:400}
+.print i{display:block;height:6px;background:#d8d0c2;margin:7px 0;border-radius:2px}
+.tape{position:absolute;top:-9px;left:40%;width:58px;height:18px;background:rgba(233,220,190,.75);transform:rotate(3deg)}
+.sketch{display:inline-block;vertical-align:middle;margin:0 4px}
+.crumbs{position:absolute;right:40px;bottom:70px;width:60px;height:24px;background:radial-gradient(circle at 10% 50%,#e8e1d4 2px,transparent 3px),radial-gradient(circle at 40% 30%,#e3dccd 1.5px,transparent 2.5px),radial-gradient(circle at 70% 70%,#e8e1d4 2px,transparent 3px),radial-gradient(circle at 90% 40%,#ddd5c5 1.5px,transparent 2.5px)}
+/* ui */
+.bar{display:flex;align-items:center;gap:16px;font-family:"Nanum Pen Script";font-size:22px;color:#cbb79a}
+.bar button{width:42px;height:42px;border-radius:50%;border:1px solid rgba(203,183,154,.4);background:transparent;color:#cbb79a;font-size:18px;cursor:pointer}
+.bar button:disabled{opacity:.25;cursor:default}
+.cap{font-size:12px;letter-spacing:3px;color:#7d6d5a;font-family:"Nanum Myeongjo"}
+
+.tie{position:absolute;inset:-8px;pointer-events:none;z-index:50}
+.tie .sv{position:absolute;left:62%;top:0;bottom:0;width:4px;background:var(--thread);box-shadow:1px 0 2px rgba(0,0,0,.35);transition:transform 1.1s cubic-bezier(.5,0,.3,1) .35s,opacity .8s .6s}
+.tie .sh{position:absolute;top:56%;left:0;right:0;height:4px;background:var(--thread);box-shadow:0 1px 2px rgba(0,0,0,.35);transition:transform 1.1s cubic-bezier(.5,0,.3,1) .35s,opacity .8s .6s}
+.knot{position:absolute;left:62%;top:56%;width:0;height:0;transition:transform .6s ease,opacity .5s .5s}
+.knot i{position:absolute;width:30px;height:18px;border:4px solid var(--thread);border-radius:50%;top:-9px}
+.knot i:nth-child(1){left:-30px;transform:rotate(18deg)}
+.knot i:nth-child(2){left:4px;transform:rotate(-18deg)}
+.knot b{position:absolute;left:-4px;top:-5px;width:12px;height:12px;border-radius:4px;background:#6a251b}
+.knot em{position:absolute;top:4px;width:4px;height:30px;background:var(--thread);border-radius:2px}
+.knot em:nth-of-type(1){left:-6px;transform:rotate(22deg);transform-origin:top}
+.knot em:nth-of-type(2){left:6px;transform:rotate(-14deg);transform-origin:top}
+.tie.loose .knot{transform:rotate(-40deg) scale(.6);opacity:0}
+.tie.loose .sv{transform:translateY(110%) rotate(8deg);opacity:0}
+.tie.loose .sh{transform:translateX(115%) rotate(-6deg);opacity:0}
+.tie.tug .sv,.tie.tug .sh,.tie.tug .knot{animation:tug .4s}
+@keyframes tug{30%{translate:0 -2px}60%{translate:0 2px}}
+.lock{display:flex;flex-direction:column;align-items:center;gap:8px;width:min(92vw,380px)}
+.lk-hint{font-family:"Nanum Pen Script";font-size:21px;color:#cbb79a}
+.lk-row{display:flex;gap:8px;width:100%}
+.lk-row input{flex:1;min-width:0;height:46px;background:#f6f1e7;border:0;border-bottom:2px solid var(--thread);padding:0 14px;font-size:20px;letter-spacing:10px;font-family:inherit;color:var(--pencil);outline:none;border-radius:2px}
+.lk-row input::placeholder{letter-spacing:1px;font-size:14px;color:#a99a85}
+.lk-row button{height:46px;padding:0 18px;border:0;background:var(--thread);color:#f6f1e7;font-family:"Nanum Pen Script";font-size:22px;border-radius:2px;cursor:pointer}
+.lk-row button:disabled{opacity:.6}
+.lk-err{min-height:22px;font-family:"Nanum Pen Script";font-size:20px;color:#d58a76}
+.lock.gone{opacity:0;transform:translateY(8px);transition:.5s;pointer-events:none}
+.bar[hidden]{display:none}
+.mark{position:absolute;left:70px;top:214px;font-family:"Nanum Myeongjo";font-size:9.5px;letter-spacing:2px;color:#5a3d22;opacity:.75}
+.credit{font-family:"Nanum Myeongjo";font-size:10px;letter-spacing:3px;color:#6e604f}
+</style>
+</head>
+<body>
+<div class="cap">온실골목 · 제하제책 작업대 맨 아래 칸</div>
+<div class="stage"><div class="book" id="book">
+
+<!-- 0 표지 -->
+<section class="leaf"><div class="page cover"><div class="threads"><i></i><i></i><i></i><i></i></div><div class="blank"></div><div class="hint">실로 단단히 묶여 있다</div><div class="mark">제하제책 · 남주수용소 소장</div></div></section>
+
+</div>
+<div class="tie" id="tie"><span class="sv"></span><span class="sh"></span><span class="knot"><i></i><i></i><b></b><em></em><em></em></span></div>
+</div>
+<form class="lock" id="lock" autocomplete="off"><div class="lk-hint">가제본 여백에 연필로 적힌 첫 날짜</div><div class="lk-row"><input id="pw" type="password" inputmode="numeric" maxlength="4" placeholder="숫자 4자리" aria-label="비밀번호"><button type="submit" id="ok">실 풀기</button></div><div class="lk-err" id="err" aria-live="polite"></div></form>
+<div class="credit">© 남주수용소 소장 · 무단 복제·사용 금지</div>
+<div class="bar" hidden id="nav"><button id="prev" aria-label="이전 장">‹</button><span id="pg">표지</span><button id="next" aria-label="다음 장">›</button></div>
+
+<script>
+const DATA={"s":"YCyZ6iPKbfnWSrOp64/rPw==","i":"B+Urw064sie/lMwe","c":"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"};
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function unlock(pw){const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(DATA.s),iterations:200000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["decrypt"]);return new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(DATA.i)},key,b64(DATA.c)));}
+const book=document.getElementById('book'),tie=document.getElementById('tie'),lock=document.getElementById('lock'),nav=document.getElementById('nav');
+const pg=document.getElementById('pg'),prev=document.getElementById('prev'),next=document.getElementById('next');
+let leaves=[],N=0,cur=0,open=false;
+function label(){pg.textContent=cur===0?'표지':cur===N-1?'뒤표지':cur+' / '+(N-2);prev.disabled=cur===0;next.disabled=cur===N-1;}
+function render(){leaves.forEach((l,i)=>{l.style.zIndex=i<cur?i:N-i;l.classList.toggle('turned',i<cur);});label();}
+function go(d){if(!open)return;const t=cur+d;if(t<0||t>N-1)return;const l=leaves[d>0?cur:t];l.classList.add('turning');l.style.zIndex=N+1;setTimeout(()=>l.classList.remove('turning'),1000);cur=t;leaves.forEach((x,i)=>x.classList.toggle('turned',i<cur));label();setTimeout(render,1000);}
+lock.onsubmit=async e=>{e.preventDefault();const pw=document.getElementById('pw'),ok=document.getElementById('ok'),err=document.getElementById('err');
+ if(!/^\d{4}$/.test(pw.value)){err.textContent='숫자 네 자리.';return;}
+ ok.disabled=true;ok.textContent='푸는 중';err.textContent='';
+ try{const html=await unlock(pw.value);book.insertAdjacentHTML('beforeend',html);
+  leaves=[...document.querySelectorAll('.leaf')];N=leaves.length;
+  leaves.forEach(l=>l.addEventListener('click',()=>go(1)));render();
+  document.querySelector('.cover .hint').textContent='눌러서 펼치기 ›';
+  tie.classList.add('loose');lock.classList.add('gone');
+  setTimeout(()=>{lock.remove();nav.hidden=false;open=true;render();},1500);
+ }catch(_){err.textContent='매듭이 풀리지 않는다.';tie.classList.remove('tug');void tie.offsetWidth;tie.classList.add('tug');pw.value='';pw.focus();ok.disabled=false;ok.textContent='실 풀기';}
+};
+next.onclick=()=>go(1);prev.onclick=()=>go(-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+let sx=null;document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)go(dx<0?1:-1);sx=null},{passive:true});
+leaves=[...document.querySelectorAll('.leaf')];N=leaves.length;
+</script>
+</body>
+</html>
