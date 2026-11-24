@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>하트빌라: 호감도는 현금으로 오릅니다</title>
+<meta name="description" content="Bloom AI 연애 시뮬레이션 《하트빌라》 공식 홈페이지 · 남주수용소">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 8' shape-rendering='crispEdges'%3E%3Cpath fill='%23d8263a' d='M1 0h2v1h1V0h1v0h2v1h1v3H8v1H7v1H6v1H5v1H4V7H3V6H2V5H1V4H0V1h1z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css">
+<style>
+/* ================== 하트빌라 · © 남주수용소 ================== */
+:root{
+  --wood-dark:#4a2511; --wood:#b5651d; --wood-hi:#d9893f; --wood-sh:#8a4b1e;
+  --parch:#f6d7a7; --parch-hi:#fbe9c8; --parch-sh:#e2b77d;
+  --heart:#d8263a; --icon-bg:#7fb2c9; --sys-bg:#2b1a0e; --sys-tx:#ffe9a8; --inv:#3f6f2a;
+  --ink:#3a1d0b; --muted:#7a5233;
+  --sky:#8ec3e6;
+  --font:'Galmuri11','DungGeunMo','Pretendard',monospace;
+}
+body.night{--sky:#1d2b52}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--wood-dark);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.6;word-break:keep-all;overflow-x:hidden;min-height:100vh;image-rendering:pixelated}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+  repeating-linear-gradient(90deg,#5a2e14 0 22px,#4a2511 22px 24px,#55290f 24px 46px,#4a2511 46px 48px)}
+img{image-rendering:pixelated}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;border:0;background:none}
+a{color:inherit}
+.wrap{max-width:980px;margin:0 auto;padding:12px 12px 120px}
+/* ---------- pixel frames ---------- */
+.frame{background:var(--parch);position:relative;padding:14px;
+  box-shadow:0 0 0 3px var(--wood-hi),0 0 0 6px var(--wood),0 0 0 9px var(--wood-sh),0 0 0 12px var(--wood-dark),0 12px 0 12px rgba(0,0,0,.25);
+  margin:12px 12px 24px}
+.frame::after{content:"";position:absolute;inset:4px;border:2px dashed var(--parch-sh);pointer-events:none}
+.parch{background:var(--parch-hi);box-shadow:0 0 0 2px var(--parch-sh),0 0 0 4px var(--wood-sh);padding:12px;margin:6px 4px 12px}
+.sys{background:var(--sys-bg);color:var(--sys-tx);padding:10px 12px;box-shadow:0 0 0 2px #6b4423,0 0 0 4px #1a0f07;margin:6px 4px 12px;font-size:13px;white-space:pre-line}
+.sys b{color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--wood-hi);color:var(--wood-dark);font-weight:700;padding:9px 14px;
+  box-shadow:inset -3px -3px 0 var(--wood),inset 3px 3px 0 #f3b071,0 0 0 2px var(--wood-dark),0 4px 0 2px var(--wood-dark);
+  transform:translateY(0);transition:transform .05s;margin:4px;min-height:40px;text-align:center}
+.btn:active,.btn.press{transform:translateY(3px);box-shadow:inset -3px -3px 0 var(--wood),inset 3px 3px 0 #f3b071,0 0 0 2px var(--wood-dark),0 1px 0 2px var(--wood-dark)}
+.btn:disabled{filter:grayscale(.8) brightness(.85);cursor:not-allowed}
+.btn.green{background:#6fa64a;color:#fff;box-shadow:inset -3px -3px 0 var(--inv),inset 3px 3px 0 #9ccc75,0 0 0 2px #1e3512,0 4px 0 2px #1e3512}
+.btn.red{background:#e0505f;color:#fff;box-shadow:inset -3px -3px 0 #9b1b29,inset 3px 3px 0 #f58a95,0 0 0 2px #4a0d14,0 4px 0 2px #4a0d14}
+.btn.small{padding:5px 10px;min-height:32px;font-size:12px}
+h2.ttl{font-size:20px;color:var(--wood-dark);display:flex;align-items:center;gap:8px;margin:2px 4px 10px}
+h3{font-size:16px;color:var(--wood-dark);margin:4px 0 6px}
+.muted{color:var(--muted);font-size:12px}
+.tag{display:inline-block;background:var(--icon-bg);color:#10324a;padding:1px 7px;margin:2px 3px 2px 0;font-size:12px;box-shadow:0 0 0 2px #3c6f8a}
+.tag.red{background:#f2a3ab;color:#5b0c16;box-shadow:0 0 0 2px #a8323f}
+.tag.blk{background:#3a2a20;color:#ffd5d5;box-shadow:0 0 0 2px #120a06}
+.tabs{display:flex;flex-wrap:wrap;gap:2px;margin:0 4px 10px}
+.tab{padding:7px 12px;background:var(--parch-sh);color:var(--wood-dark);box-shadow:0 0 0 2px var(--wood-sh);margin:2px}
+.tab.on{background:var(--wood-hi);color:#fff;text-shadow:1px 1px 0 var(--wood-dark);box-shadow:0 0 0 2px var(--wood-dark),inset 0 -3px 0 var(--wood)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+/* ---------- hearts ---------- */
+.hearts{display:inline-flex;gap:2px;vertical-align:middle;flex-wrap:wrap}
+.hp{width:18px;height:16px;display:inline-block;background-size:100% 100%}
+.hp.f{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 8' shape-rendering='crispEdges'%3E%3Cpath fill='%234a0d14' d='M1 0h2v1h1V0h1v0h2v1h1v3H8v1H7v1H6v1H5v1H4V7H3V6H2V5H1V4H0V1h1z'/%3E%3Cpath fill='%23d8263a' d='M1 1h2v1h1V1h1h2v3H7v1H6v1H5v1H4V6H3V5H2V4H1z'/%3E%3Cpath fill='%23ff8a95' d='M2 1h1v1H2z'/%3E%3C/svg%3E")}
+.hp.h{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 8' shape-rendering='crispEdges'%3E%3Cpath fill='%234a0d14' d='M1 0h2v1h1V0h1v0h2v1h1v3H8v1H7v1H6v1H5v1H4V7H3V6H2V5H1V4H0V1h1z'/%3E%3Cpath fill='%23f4d6d9' d='M1 1h2v1h1V1h1h2v3H7v1H6v1H5v1H4V6H3V5H2V4H1z'/%3E%3Cpath fill='%23d8263a' d='M1 1h2v1h1v5H3V5H2V4H1z'/%3E%3C/svg%3E")}
+.hp.e{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 8' shape-rendering='crispEdges'%3E%3Cpath fill='%237a5233' d='M1 0h2v1h1V0h1v0h2v1h1v3H8v1H7v1H6v1H5v1H4V7H3V6H2V5H1V4H0V1h1z'/%3E%3Cpath fill='%23f4d6d9' d='M1 1h2v1h1V1h1h2v3H7v1H6v1H5v1H4V6H3V5H2V4H1z'/%3E%3C/svg%3E")}
+/* ---------- placeholder for missing images ---------- */
+.ph{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:var(--wood-dark);font-size:12px;text-align:center;
+  background:repeating-conic-gradient(var(--parch-sh) 0 25%,var(--parch) 0 50%) 0 0/16px 16px;box-shadow:inset 0 0 0 3px var(--wood-sh)}
+.ph .emo{font-size:34px;line-height:1}
+/* ---------- title ---------- */
+#title .stage{position:relative;width:100%;aspect-ratio:3/2;overflow:hidden;background:var(--sky);box-shadow:inset 0 0 0 3px var(--wood-dark)}
+#title .stage>img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#title .stage .ph{position:absolute;inset:0}
+.logo{position:absolute;left:50%;top:4%;transform:translateX(-50%);text-align:center;width:92%}
+.logo .ver{display:inline-block;font-size:11px;letter-spacing:2px;color:var(--sys-tx);background:rgba(43,26,14,.85);padding:2px 8px;box-shadow:0 0 0 2px #6b4423}
+.logo h1{font-size:clamp(26px,6.4vw,54px);color:#fff;letter-spacing:2px;margin-top:6px;
+  text-shadow:3px 0 0 var(--wood-dark),-3px 0 0 var(--wood-dark),0 3px 0 var(--wood-dark),0 -3px 0 var(--wood-dark),3px 3px 0 var(--wood-dark),-3px 3px 0 var(--wood-dark),3px -3px 0 var(--wood-dark),-3px -3px 0 var(--wood-dark),0 7px 0 var(--heart)}
+.logo h1 .hh{color:var(--heart)}
+.logo .sub{display:inline-block;margin-top:8px;background:var(--parch-hi);padding:3px 10px;font-size:clamp(12px,2.4vw,17px);box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--wood-dark)}
+.actor{position:absolute;bottom:3%;height:21%;cursor:pointer;z-index:3}
+.actor img{height:100%;width:auto;display:block;filter:drop-shadow(0 3px 0 rgba(0,0,0,.25))}
+.actor .ph{width:44px;height:100%;font-size:22px;box-shadow:none;background:none}
+.actor.sofa{height:16%}
+.bub{position:absolute;bottom:102%;left:50%;transform:translateX(-50%);background:#fff;color:var(--ink);font-size:11px;padding:3px 7px;white-space:nowrap;
+  box-shadow:0 0 0 2px var(--wood-dark);opacity:0;transition:opacity .2s;pointer-events:none;z-index:5}
+.bub.on{opacity:1}
+.bub::after{content:"";position:absolute;top:100%;left:50%;margin-left:-4px;border:4px solid transparent;border-top-color:var(--wood-dark)}
+.fx{position:absolute;pointer-events:none;z-index:6;font-size:18px;animation:fxup 1s steps(8) forwards}
+@keyframes fxup{0%{transform:translate(0,0) scale(.6);opacity:1}100%{transform:translate(var(--dx,0),-60px) scale(1.2);opacity:0}}
+.flash{position:absolute;inset:0;background:#fff;z-index:7;pointer-events:none;animation:flash .35s forwards}
+@keyframes flash{from{opacity:.9}to{opacity:0}}
+/* idle animations */
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes tap{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.03)}}
+@keyframes walkA{0%{left:30%}45%{left:60%}50%{left:60%}95%{left:30%}100%{left:30%}}
+@keyframes flipA{0%,47%{transform:scaleX(1)}48%,97%{transform:scaleX(-1)}98%,100%{transform:scaleX(1)}}
+@keyframes walkB{0%{left:56%}45%{left:72%}50%{left:72%}95%{left:56%}100%{left:56%}}
+@keyframes walkC{0%{left:40%}45%{left:52%}50%{left:52%}95%{left:40%}100%{left:40%}}
+@keyframes hop{0%,100%{margin-bottom:0}50%{margin-bottom:3px}}
+.a-wooju{left:7%}.a-wooju img{animation:tap 1.2s steps(4) infinite;transform-origin:50% 90%}
+.a-dohee{left:19%}.a-dohee img{animation:breathe 2.4s steps(4) infinite;transform-origin:50% 100%}
+.a-gichan{animation:walkA 14s linear infinite}.a-gichan img{animation:flipA 14s linear infinite,hop .5s steps(2) infinite}
+.a-seola{animation:walkB 11s linear infinite}.a-seola img{animation:flipA 11s linear infinite,hop .45s steps(2) infinite}
+.a-eunsol{animation:walkC 9s linear infinite;bottom:2%}.a-eunsol img{animation:flipA 9s linear infinite,hop .55s steps(2) infinite}
+.a-jaun{right:2%;left:auto}.a-jaun img{animation:breathe 3s steps(3) infinite;transform-origin:50% 100%}
+.zzz{position:absolute;top:-6%;right:12%;color:#a98ee8;font-size:14px;animation:zz 2s steps(4) infinite;text-shadow:1px 1px 0 #2b1a0e}
+@keyframes zz{0%{transform:translate(0,0);opacity:0}30%{opacity:1}100%{transform:translate(8px,-14px);opacity:0}}
+body.noanim *,body.noanim *::before,body.noanim *::after{animation:none!important;transition:none!important}
+.sysbox{position:absolute;left:3%;right:3%;bottom:26%;z-index:4;max-width:460px;margin:0 auto}
+@media(max-width:560px){#title .stage{aspect-ratio:4/3}.sysbox{bottom:25%}.logo{top:2%}.logo h1{margin-top:2px}.logo .sub{margin-top:4px}}
+.sysbox .sys{margin:0;font-size:clamp(11px,2.2vw,13px)}
+.cursor::after{content:"▮";animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+@media(max-width:560px){.menu{grid-template-columns:repeat(2,1fr)}.menu .start{grid-column:1/-1}}
+.menu .btn{margin:2px;justify-content:flex-start;padding-left:12px}
+.menu .start{background:var(--heart);color:#fff;box-shadow:inset -3px -3px 0 #8c1422,inset 3px 3px 0 #ff7a86,0 0 0 2px #3d0710,0 4px 0 2px #3d0710;justify-content:center}
+.ico{display:inline-block;width:20px;text-align:center}
+footer{text-align:center;color:var(--parch);font-size:12px;margin:18px 0 0;line-height:2}
+footer a{color:var(--sys-tx)}
+.notice{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--sys-bg);color:var(--sys-tx);font-size:11px;text-align:center;padding:6px 8px;box-shadow:0 -3px 0 var(--wood-dark)}
+/* ---------- screens ---------- */
+.screen{display:none}.screen.on{display:block}
+.topbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 12px 4px}
+.topbar .btn{margin:2px}
+/* ---------- dex ---------- */
+.dex{display:grid;grid-template-columns:240px 1fr;gap:14px}
+@media(max-width:640px){.dex{grid-template-columns:1fr}.dex .port{max-width:260px;margin:0 auto}.dex .hp{width:15px;height:13px}}
+.port{background:var(--icon-bg);box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--wood-dark);aspect-ratio:4/5;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;position:relative}
+.port img{width:100%;height:100%;object-fit:contain;object-position:bottom}
+.port .ph{position:absolute;inset:0}
+.port .badge{position:absolute;left:6px;top:6px;background:var(--sys-bg);color:var(--sys-tx);font-size:11px;padding:1px 6px}
+.spr{display:flex;justify-content:center;margin-top:10px;height:96px}
+.spr img{height:100%}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:13px}
+.kv dt{color:var(--muted)}
+.quote{font-size:15px;background:#fff;padding:8px 10px;box-shadow:0 0 0 2px var(--wood-dark),3px 3px 0 2px var(--parch-sh);margin:8px 2px 12px;position:relative}
+.lock{display:flex;align-items:center;gap:10px;background:#3a2a20;color:#e8d3b8;padding:10px;box-shadow:0 0 0 2px #120a06;margin:6px 2px}
+.lock .k{font-size:22px}
+.flow{list-style:none;margin:0}
+.flow li{display:grid;grid-template-columns:62px 1fr;gap:8px;padding:5px 0;border-bottom:2px dotted var(--parch-sh);font-size:13px}
+.flow li b{color:var(--heart)}
+.mini-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+/* ---------- rivals ---------- */
+.rivals{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.rivals{grid-template-columns:1fr}}
+.rcard{background:var(--parch-hi);box-shadow:0 0 0 2px var(--parch-sh),0 0 0 4px var(--wood-sh);padding:10px;margin:4px}
+.rcard .port{aspect-ratio:1/1;background:#e7a9b4}
+/* ---------- map ---------- */
+.mapwrap{position:relative;width:100%;aspect-ratio:3/2;box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--wood-dark);background:#cfe3c2;overflow:hidden}
+.mapwrap>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mapwrap.noimg{background:
+  linear-gradient(#bfe0f2 0 6%,transparent 6%),
+  linear-gradient(90deg,transparent 10%,#f1dcc2 10% 46%,#e8cfb0 46% 54%,#f1dcc2 54% 95%,transparent 95%)}
+.hot{position:absolute;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;cursor:pointer;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,0);transition:box-shadow .15s,background .15s}
+.hot:hover,.hot:focus{box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 6px var(--heart);background:rgba(255,233,168,.18);outline:0}
+.hot span{background:rgba(43,26,14,.86);color:var(--sys-tx);font-size:clamp(10px,1.8vw,12px);padding:1px 6px;white-space:nowrap}
+.hot.seen span::after{content:" ✓";color:#9ccc75}
+.hot.locked span{background:#3a2a20;color:#e8d3b8}
+.mapwrap.noimg .hot{box-shadow:inset 0 0 0 3px var(--wood-sh);background:rgba(251,233,200,.6)}
+.place{display:grid;grid-template-columns:1.3fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:640px){.place{grid-template-columns:1fr}}
+.place .pimg{position:relative;aspect-ratio:16/9;box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--wood-dark);overflow:hidden;background:var(--parch-sh)}
+.place .pimg img{width:100%;height:100%;object-fit:cover;display:block}
+.place .pimg .ph{position:absolute;inset:0}
+.place .pimg.locked img{filter:grayscale(1) brightness(.35) blur(2px)}
+.place .pimg .lk{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:42px}
+.thumbs{display:flex;gap:6px;margin-top:8px}
+.thumbs button{width:64px;aspect-ratio:16/9;box-shadow:0 0 0 2px var(--wood-sh);overflow:hidden}
+.thumbs button.on{box-shadow:0 0 0 3px var(--heart)}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+/* ---------- guide ---------- */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0}
+.tbl th,.tbl td{padding:6px 8px;border:2px solid var(--parch-sh);text-align:left;vertical-align:top}
+.tbl th{background:var(--parch-sh);color:var(--wood-dark)}
+.faq dt{font-weight:700;color:var(--wood-dark);margin-top:10px}
+.faq dt::before{content:"Q. ";color:var(--heart)}
+.faq dd{margin:2px 0 0 0;padding-left:20px}
+.faq dd::before{content:"A. ";margin-left:-20px;color:var(--inv);font-weight:700}
+/* ---------- trial ---------- */
+.hud{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--sys-bg);color:var(--sys-tx);padding:8px 10px;box-shadow:0 0 0 2px #6b4423,0 0 0 4px #1a0f07;margin:4px 4px 12px}
+.hud .it{display:flex;align-items:center;gap:5px;background:#3d2716;padding:3px 8px;box-shadow:0 0 0 2px #1a0f07}
+.ap{display:inline-flex;gap:2px}
+.ap i{width:10px;height:14px;background:#6fa64a;box-shadow:0 0 0 1px #1e3512;display:inline-block}
+.ap i.x{background:#4b3b2c}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media(max-width:560px){.tc{padding:8px 4px;margin:3px}.tc .av{width:58px;height:58px}.tc b{font-size:12px}.tc .hp{width:13px;height:12px}.tc .btn{font-size:11px;padding:5px 4px;margin:4px 0 0}.tc.done::after{font-size:9px;right:2px;top:2px}.tc .muted{font-size:10px}}
+.tc{background:var(--parch-hi);box-shadow:0 0 0 2px var(--parch-sh),0 0 0 4px var(--wood-sh);padding:10px;margin:4px;text-align:center;position:relative}
+.tc .av{width:84px;height:84px;margin:0 auto 6px;background:var(--icon-bg);box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--wood-dark);overflow:hidden;position:relative}
+.tc .av img{width:100%;height:100%;object-fit:cover;object-position:top}
+.tc .av .ph{position:absolute;inset:0}
+.tc.done::after{content:"CLEAR!";position:absolute;right:8px;top:8px;background:var(--heart);color:#fff;font-size:11px;padding:1px 6px;transform:rotate(8deg);box-shadow:0 0 0 2px #3d0710}
+.game{margin-top:12px}
+.game .who{display:flex;gap:10px;align-items:flex-start}
+.game .who .av{flex:none;width:64px;height:64px;background:var(--icon-bg);box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--wood-dark);overflow:hidden;position:relative}
+.game .who .av img{width:100%;height:100%;object-fit:cover;object-position:top}
+.game .who .av .ph{position:absolute;inset:0}
+.say{flex:1;background:#fff;padding:9px 11px;box-shadow:0 0 0 2px var(--wood-dark);min-height:64px;position:relative}
+.say::before{content:"";position:absolute;left:-8px;top:18px;border:4px solid transparent;border-right-color:var(--wood-dark);border-width:4px 8px 4px 0}
+.say .nm{font-weight:700;color:var(--wood-dark);display:block;font-size:12px}
+.choices{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.choices .btn{justify-content:space-between;text-align:left;width:auto}
+.choices .btn small{opacity:.8;font-weight:400;font-size:11px;white-space:nowrap}
+.log{max-height:150px;overflow:auto;font-size:12px}
+.pop{position:fixed;z-index:60;pointer-events:none;font-size:26px;animation:popup 1.1s steps(10) forwards}
+@keyframes popup{0%{transform:translateY(0) scale(.5);opacity:1}60%{opacity:1}100%{transform:translateY(-80px) scale(1.3);opacity:0}}
+.shake{animation:shake .35s steps(4)}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+/* ---------- achievements ---------- */
+.ach{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.acard{display:flex;gap:10px;align-items:center;background:var(--parch-hi);padding:9px;box-shadow:0 0 0 2px var(--parch-sh),0 0 0 4px var(--wood-sh);margin:4px}
+.acard .i{flex:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--icon-bg);box-shadow:0 0 0 2px #3c6f8a}
+.acard.off{filter:grayscale(1);opacity:.65}
+.acard.off .i{background:#7d7d7d;box-shadow:0 0 0 2px #444}
+.acard b{display:block;font-size:13px}
+.acard span{font-size:11px;color:var(--muted)}
+.toast{position:fixed;left:50%;top:14px;transform:translate(-50%,-140%);z-index:70;background:var(--sys-bg);color:var(--sys-tx);padding:10px 14px;box-shadow:0 0 0 3px #d9893f,0 0 0 6px #1a0f07;transition:transform .3s steps(5);display:flex;gap:10px;align-items:center;max-width:92vw}
+.toast.on{transform:translate(-50%,0)}
+.toast .i{font-size:24px}
+/* ---------- hidden ---------- */
+.vault{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.slot{background:#3a2a20;color:#e8d3b8;padding:12px;box-shadow:0 0 0 2px #120a06,0 0 0 4px var(--wood-sh);margin:4px;cursor:pointer;text-align:left;min-height:96px;display:flex;flex-direction:column;gap:4px}
+.slot .k{font-size:22px}
+.slot.open{background:var(--parch-hi);color:var(--ink);box-shadow:0 0 0 2px var(--parch-sh),0 0 0 4px var(--heart)}
+.codein{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.codein input{flex:1;min-width:0;font-family:inherit;font-size:16px;padding:8px 10px;border:0;background:#fff;box-shadow:inset 2px 2px 0 var(--parch-sh),0 0 0 2px var(--wood-dark)}
+.reader{background:var(--parch-hi);padding:14px;box-shadow:0 0 0 2px var(--parch-sh),0 0 0 4px var(--heart);margin:10px 4px;line-height:1.8}
+.reader img{max-width:100%;display:block;margin:8px auto}
+.unl-ok{color:var(--heart);font-weight:700}
+/* ---------- settings ---------- */
+.set{display:grid;grid-template-columns:1fr auto;gap:10px 12px;align-items:center}
+.sw{width:58px;height:28px;background:#7d6a58;box-shadow:0 0 0 2px var(--wood-dark),inset 0 3px 0 rgba(0,0,0,.25);position:relative}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;background:var(--parch-hi);box-shadow:0 0 0 2px var(--wood-dark);transition:left .12s steps(3)}
+.sw.on{background:#6fa64a}.sw.on::after{left:33px}
+input[type=range]{width:150px;accent-color:var(--heart)}
+.seg{display:flex;gap:2px}
+.seg button{padding:5px 9px;background:var(--parch-sh);box-shadow:0 0 0 2px var(--wood-sh);font-size:12px}
+.seg button.on{background:var(--wood-hi);color:#fff;box-shadow:0 0 0 2px var(--wood-dark)}
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:80;background:rgba(26,15,7,.72);display:none;align-items:center;justify-content:center;padding:16px}
+.modal.on{display:flex}
+.modal .frame{max-width:420px;width:100%;margin:0}
+.modal .row{display:flex;justify-content:flex-end;flex-wrap:wrap;margin-top:10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wm{font-size:10px;color:var(--muted);text-align:right;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= TITLE ================= -->
+<section class="screen on" id="title">
+  <div class="frame" style="padding:10px">
+    <div class="stage" id="stage">
+      <img class="bg" id="titleBg" alt="해담빌라 외관">
+      <div class="logo">
+        <span class="ver">HEART VILLA · VER 1.0</span>
+        <h1><span class="hh">♥</span> 하트빌라 <span class="hh">♥</span></h1>
+        <span class="sub">호감도는 현금으로 오릅니다</span>
+      </div>
+      <div class="sysbox"><div class="sys" id="introSys"></div></div>
+      <div id="actors"></div>
+    </div>
+    <div class="menu" id="mainMenu">
+      <button class="btn start" data-act="start">▶ 게임 시작</button>
+      <button class="btn" data-go="dex"><span class="ico">♥</span>공략 대상 도감</button>
+      <button class="btn" data-go="rivals"><span class="ico">⚔</span>라이벌 도감</button>
+      <button class="btn" data-go="map"><span class="ico">▦</span>해담빌라 지도</button>
+      <button class="btn" data-go="guide"><span class="ico">📖</span>공략 가이드</button>
+      <button class="btn" data-go="trial"><span class="ico">🎮</span>공략 체험판</button>
+      <button class="btn" data-go="achv"><span class="ico">★</span>업적 도감</button>
+      <button class="btn" data-go="vault"><span class="ico">🔒</span>히든 콘텐츠</button>
+      <button class="btn" data-go="settings"><span class="ico">⚙</span>환경 설정</button>
+    </div>
+    <p class="muted" style="text-align:center;margin-top:10px">캐릭터를 눌러 보세요. 반응이 있어요.</p>
+  </div>
+  <footer>© 2026 남주수용소 🕋⛓️💜<br>
+    <a href="https://x.com/namju_lab" target="_blank" rel="noopener">X @namju_lab</a> · <a href="https://open.kakao.com/me/namju_lab" target="_blank" rel="noopener">오픈카톡</a></footer>
+</section>
+
+<!-- ================= DEX ================= -->
+<section class="screen" id="dex">
+  <div class="topbar"><button class="btn small" data-go="title">◀ 타이틀</button></div>
+  <div class="frame">
+    <h2 class="ttl">♥ 공략 대상 도감</h2>
+    <div class="tabs" id="dexTabs"></div>
+    <div id="dexBody"></div>
+    <div class="wm">© 남주수용소 · 하트빌라</div>
+  </div>
+</section>
+
+<!-- ================= RIVALS ================= -->
+<section class="screen" id="rivals">
+  <div class="topbar"><button class="btn small" data-go="title">◀ 타이틀</button></div>
+  <div class="frame">
+    <h2 class="ttl">⚔ 라이벌 도감</h2>
+    <div class="sys">[시스템] 라이벌도 남주와의 관계를 따로 쌓아 갑니다. 라이벌 호감도가 9.0이 되고 당신보다 높으면, 고백 이벤트가 열릴 수 있습니다.</div>
+    <div class="rivals" id="rivalList"></div>
+    <div class="wm">© 남주수용소 · 하트빌라</div>
+  </div>
+</section>
+
+<!-- ================= MAP ================= -->
+<section class="screen" id="map">
+  <div class="topbar"><button class="btn small" data-go="title">◀ 타이틀</button></div>
+  <div class="frame">
+    <h2 class="ttl">▦ 해담빌라 지도</h2>
+    <p class="muted" style="margin:0 4px 8px">층을 눌러 둘러보세요. 공개된 장소를 모두 방문하면 업적이 열립니다. <span id="visitCount"></span></p>
+    <div class="mapwrap" id="mapwrap"><img id="mapImg" alt="해담빌라 단면도"></div>
+    <div style="margin:10px 2px 0"><button class="btn green" data-place="camper">🚐 빌라 앞 공터 · 캠핑카</button></div>
+    <div id="placeBox"></div>
+    <div class="wm">© 남주수용소 · 하트빌라</div>
+  </div>
+</section>
+
+<!-- ================= GUIDE ================= -->
+<section class="screen" id="guide">
+  <div class="topbar"><button class="btn small" data-go="title">◀ 타이틀</button></div>
+  <div class="frame">
+    <h2 class="ttl">📖 공략 가이드</h2>
+    <div class="tabs" id="guideTabs"></div>
+    <div id="guideBody"></div>
+    <div class="wm">© 남주수용소 · 하트빌라</div>
+  </div>
+</section>
+
+<!-- ================= TRIAL ================= -->
+<section class="screen" id="trial">
+  <div class="topbar"><button class="btn small" data-go="title">◀ 타이틀</button><button class="btn small red" id="trialReset">↺ 체험판 초기화</button></div>
+  <div class="frame">
+    <h2 class="ttl">🎮 공략 체험판</h2>
+    <div class="hud" id="hud"></div>
+    <div class="trio" id="trio"></div>
+    <div class="game parch" id="game"></div>
+    <div class="sys log" id="tlog"></div>
+    <div class="wm">© 남주수용소 · 하트빌라 체험판</div>
+  </div>
+</section>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+<section class="screen" id="achv">
+  <div class="topbar"><button class="btn small" data-go="title">◀ 타이틀</button></div>
+  <div class="frame">
+    <h2 class="ttl">★ 업적 도감 <span class="muted" id="achCount"></span></h2>
+    <h3>홈페이지 업적</h3>
+    <div class="ach" id="achWeb"></div>
+    <h3 style="margin-top:14px">본편 업적</h3>
+    <p class="muted" style="margin:0 4px 6px">Bloom AI 본편에서 얻은 🔑 코드를 '히든 콘텐츠'에 입력하면 해금됩니다.</p>
+    <div class="ach" id="achMain"></div>
+    <div class="wm">© 남주수용소 · 하트빌라</div>
+  </div>
+</section>
+
+<!-- ================= VAULT ================= -->
+<section class="screen" id="vault">
+  <div class="topbar"><button class="btn small" data-go="title">◀ 타이틀</button></div>
+  <div class="frame">
+    <h2 class="ttl">🔒 히든 콘텐츠</h2>
+    <div class="sys">[시스템] 본편에서 특정 장면에 도달하면 🔑 히든 코드가 지급됩니다.
+코드를 입력하면 맞는 칸이 자동으로 열립니다. (띄어쓰기는 무시합니다)</div>
+    <div class="parch">
+      <label for="codeIn"><b>🔑 코드 입력</b></label>
+      <div class="codein"><input id="codeIn" autocomplete="off" placeholder="본편에서 받은 코드"><button class="btn green" id="codeBtn">해금</button></div>
+      <p class="muted" id="codeMsg" style="margin-top:6px" aria-live="polite"></p>
+    </div>
+    <div class="vault" id="vaultList"></div>
+    <div id="reader"></div>
+    <div class="wm">© 남주수용소 · 하트빌라</div>
+  </div>
+</section>
+
+<!-- ================= SETTINGS ================= -->
+<section class="screen" id="settings">
+  <div class="topbar"><button class="btn small" data-go="title">◀ 타이틀</button></div>
+  <div class="frame">
+    <h2 class="ttl">⚙ 환경 설정</h2>
+    <div class="parch set">
+      <span>🎵 BGM</span><button class="sw" id="swBgm" aria-label="BGM 켜기/끄기"></button>
+      <span>🔔 효과음</span><button class="sw" id="swSfx" aria-label="효과음 켜기/끄기"></button>
+      <span>🔊 음량</span><input type="range" id="vol" min="0" max="100" aria-label="음량">
+      <span>🌗 배경</span><div class="seg" id="segDay"><button data-v="auto">자동</button><button data-v="day">낮</button><button data-v="night">밤</button></div>
+      <span>✨ 애니메이션</span><button class="sw" id="swAnim" aria-label="애니메이션 켜기/끄기"></button>
+    </div>
+    <p class="muted" id="bgmMsg" style="margin:0 4px 10px"></p>
+    <div class="parch">
+      <h3>저장 데이터</h3>
+      <p class="muted">체험판 진행도, 업적, 지도 방문 기록, 히든 해금 상태가 이 브라우저에 저장됩니다.</p>
+      <button class="btn red" id="wipeAll">🗑 저장 데이터 전체 초기화</button>
+    </div>
+    <div class="wm">© 남주수용소 · 하트빌라</div>
+  </div>
+</section>
+
+</div>
+
+<div class="notice">※ 홈페이지 체험판의 호감도는 Bloom AI 본편에 반영되지 않습니다.</div>
+<div class="toast" id="toast"><span class="i" id="toastI">🏆</span><div><b id="toastT"></b><div class="muted" style="color:#d9c38a" id="toastD"></div></div></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="frame"><div id="modalBody"></div><div class="row" id="modalRow"></div></div></div>
+<audio id="bgm" loop preload="none"></audio>
+
+<script>
+/* =========================================================
+   하트빌라 공식 홈페이지 · © 2026 남주수용소 🕋⛓️💜
+   ▼ 1) 링크·이미지 주소는 여기서만 바꾸면 됩니다.
+   ========================================================= */
+const CONFIG = {
+  BLOOM_URL: '',   // ← Bloom AI 작품 주소를 따옴표 안에 넣으세요. 비어 있으면 "오픈 준비 중" 안내가 뜹니다.
+  X_URL: 'https://x.com/namju_lab',
+  KAKAO_URL: 'https://open.kakao.com/me/namju_lab',
+};
+const A = './heartvilla/';   // 리소스 폴더 (heartvilla.html과 같은 위치의 heartvilla 폴더)
+const ASSET = {
+  bg:{ day:A+'backgrounds/villa_day.webp', night:A+'backgrounds/villa_night.webp', map:A+'backgrounds/villa_map.webp',
+       store:A+'backgrounds/store.webp', r201:A+'backgrounds/room_201.webp', r202:A+'backgrounds/room_202.webp',
+       r301:A+'backgrounds/room_301.webp', r302:A+'backgrounds/room_302.webp', roof:A+'backgrounds/rooftop.webp',
+       camperOut:A+'backgrounds/camper_exterior.webp', camperIn:A+'backgrounds/camper_interior.webp', lobby:'' },
+  portrait:{ wooju:A+'portraits/wooju.png', gichan:A+'portraits/gichan.png', jaun:A+'portraits/jaun.png',
+             dohee:A+'portraits/dohee.png', seola:A+'portraits/seola.png', eunsol:A+'portraits/eunsol.png' },
+  sprite:{ wooju:A+'sprites/wooju.png', gichan:A+'sprites/gichan.png', jaun:A+'sprites/jaun.png', jaunSleep:A+'sprites/jaun_sleep.png',
+           dohee:A+'sprites/dohee.png', seola:A+'sprites/seola.png', eunsol:A+'sprites/eunsol.png' },
+  ending:{ wooju:'', gichan:'', jaun:'' },   // 엔딩 일러스트가 생기면 주소를 넣으세요 (해금 후 도감에 표시)
+  bgm: A+'audio/bgm.mp3',
+};
+/* ▼ 2) 히든 콘텐츠 봉인 데이터 (봉인 도구로 만든 값을 통째로 붙여 넣기) */
+const SECRETS = {"wooju":{"s":"s+WUsJVYUqnIhakRGKxp7g==","i":"Oh6kGzTPH+2YzZUW","c":"M+qpX3kDIv5OEGmI0eclL7ew1igCcKp0DHGQucknpLeP1h1CrRaXldFpvvEkaAhAZ+V8VXVWItkp4Tud5fxFoB+ick0w6WgqNUvH9WipFJec/raC9TsbyvuIGXomOD3JwAYGMw7/zF0AkwUgjfRJ9ljRZu0s5c1VG7hdLuJ+cX6dLK0V2bZyK5ORR9DPwV2o/cYKsMJXho1KdAwG3tmBZHrpiSUp1DH48lZ3j/cuGqtpmPxel+S/bk5+hapgxWTXMj0BLdgqe7PJRf2ZdMwW63r+Tbv2aUhoP8epq0yXDUyOMMJk5ZpOQKzA8GPydie72FocZ2aOi4w83aAhh4YrpJ5pHefrvOsXBI9XGQSpHKUpcSOFmWzNUd1SbdKSbAR/qBeU8QxWh1zImG13aw=="},"gichan":{"s":"ZWkqkrqzCiXLIjlAJg1JkA==","i":"UGeXCODMuiRh3vPU","c":"WKD1TAjOWntw3vtk4SEBYs0g5lZVT4zIF577njkKFAVpVOArMir2Jja7fVwYMJe/RdKzrB/Zjg93X2e7GkSz53mV8n93ANdgSLr1bwvhlhm0uOIiqhpa/ll7uO5YpHY9SZyUM6NegUSaArEqXLy0olvoCYj5ZQux0IfXj6t/UkDNYeMawZjnwLxwyvb17UVEpT/qZrM62ZiZcVeUdVKMhB7GgfYrwRYqs5OZ7hKev/8RxJTfdhCFNmNp/4b/aT/j+7oa3nDuBIBibYbgbzO0jUPYyRjjmOL5sQajYPCy61SD6QnAdnklDEa2FMpSgIf6J/Swm1qus0KAcoYsr/Qx5S1ChGj5HvuxYQfp+FfVfw8sJVD7k5pFwKGN4pB0WC0bVux/z519GjlATBdNRw=="},"jaun":{"s":"fpD2JE5HnCUDi2arbR7mzA==","i":"CDnKXAwN83/419tF","c":"S7xpMS4hVj6L6tnyW1QOtJpeUV8pwiuGjt8Gf2Uq4qpIgpVPyUNzfFcrINRoFsuyX//12EeJXJ1KA65iDAZDRy5ApmQy6KrzodNu0xZATNTDim28m53mYThpVhdw0rxZcO6yz/+I1BsEEX2XcmRmexuo27SugRv2p3SifThpIWxUwXM2BRWTwVyxAfw8oWv2THwm44ZUhyKyBfjMQ85XHIKYtuQd+jRooKfPTayDtBpKwTDz2sNTMNUlyL6GI6q/szu3AazeG2I7KlmJ22Enk/MixVQG+qJ+lGyH1T7DtdZvh5p6KlpLojEohsxOyIN8VKw5MlhK9UkxXstJSh8be/m/MTAAj/wbiaBqrNRNIw+WNp9sczZDNXpRhz8S9kQwUgZ4ZUe85y/QCTQg1g=="},"rival":{"s":"eNSl0Vtpvvui1lfuQzcZ8w==","i":"K6ufHr7o/7MhCWd0","c":"0t+CtQS2Yd9AopeGp3ilRdQ0sMiYrXqQH/aSPt0lQxDS2eRWE1LfSb32LCR1KQoN01PEeFlRtbTketmt5pA2jL6s5bhPJnZfFW47IF0IwM32OEGRDrfHgB6v8NVKu+QmuOXDcHFqthSDVz0XxJ5/NqvrlFXfl8J2HQhTeXfDEm+4Bt9sIKvT2uuRspS0RSSeHUNzePkBjMuhnNM9/ZG8wTA1qkVMwepkfXJB7TDShRYakUJ5iI3Ck+kuDnzUH1PU5uUq5BNBGw0ZQRv0TC0t4LCmRmuROnWvgM73f+Wz9ig1D+aOib9gNX+GMLznAmd8cE1VQhpsMzM4IF1aeQYSOoSTLvKNJfnTy+5rW0QQwJeVjckbYt+LqmxnsWZ8FweGQfE/m2Ql"},"bonus":{"s":"Ngrq5Ha2mBChYG71qU/c5w==","i":"JX9hL9lqFvr5RxZ2","c":"C0g0BRIcvaWfxT/fiRTR7CWdaAXSAASVu7bFw+lXQOSrrW7RS8qR4TioHQ7wyfYP7R/usB95moa7ODuY1V2xhE5caHGYKZBPJg5nyf8/BXzG79gEOhocganuPueCpZq5g8cn8jcG8/Wsl1UgNvZ2XBy2CiOnH4iCnEfViOpHNvAm7WgDliQLwF+Aig7zVFRA3u5PMnQhPIstvh+VPLWCASjvfAoyeSdzIzOeL+HKrFtKEjzCi4iGXP++U6ik8WzEnLUjY4fDlpGzHh+KRLEBPfmZFYoc13GfH+qU0SsqUpa6pdqM9fzdZziK34OHWi/uj6+0wwYHb/1i1xHcqFSA4shIEluETMv2JapQGT7TqLSCjfr+Ed3SgBjCHaTCmLXZexWXbOA6"},"illust":{"s":"qo4J49afnBIoCG0lldJKFw==","i":"nmsCz6uuhX5vOZQa","c":"YhGBR3eLIt1RngnXrG8xbegKOid7jmhBVFbei/Sjn2d25ijR5KuHyEHH2ZFHrGeUbuzNcAbDEKxUBrfOqJRGhC+mvb8hF9vfGQbiJHXYoTov1fmc7ZhBW+yZkraL5ufu7xoaNYRSbvwBb9CxRRWZgkAZEfoAY9qhzVB8u99Uug2ouH3FEi0pUGlBmYkqMbVQ5i6//+BCmdX41AHQ9Vwz91sV58U3XnmVxLb7tH5dikINgo+fCtrN3blDn6sIfFsUaKQyEfGWsvyvNK4uBo4Im6XPigX70phyIu1VBP4APzEPWlyxrx/3360scjx8dbSioPM/xZg6EBhKJ9zAyLFCHhdCH49m7feOANqzGgxq0IbpQYMgeKUm+ErwoCNdqHWUZgEVxkQ4"},"side":{"s":"/lUjC3dASZYUtLTbhH7gug==","i":"U/1E/dv/nFS2Gc4O","c":"0hzGDpEXuUuddmtXwdAYj8uV9oxzkbfsy2EHQh03aS2pkql3Xs3zXTZf5RVSZHk/tv99z9iHl0fCISSFEJis8n8R3mM+ng4oB4zwOrbblp4sEYWWsjqPXa7s4EVrvkl/3sDK9zsYTI5/ANPnZ24RYoAHxsm42y7//Yz86Z9xiMiXCllwnMPW7O3k0AI8LhvzviQe0SvVoZxrgZwYtnTW2Ho151TG52SIGYJB2FqUWzPL4icSrdLiGUJCaI8vvLCM7/Wrn4pJ5sDwL8C9MgL1GZpI5rdilX/n42E5cKQAsCJ9TTe9Fbbbp4tAF4VT2vcxu7VNw0joT/84An6fUBdWjoXJbiH7qwMRhe4/UaAfCrYp+/Y6pLiIOIzcWjUQ5HIZC5/DZsN2tg=="},"ending":{"s":"sFIEuuVuFqoI1HuLW4nOig==","i":"KZNzbrLP51jdzTt6","c":"hT8QArWv5lHFpYVqQ3mTrg4l+QcNg4p/e0rKOHbQcoOi+NjfVccIc6muK3BNgJMuCBfIcxKWYczu7uUevO4cXY1jlS7IboVo/nURJAhGcXqnNknTg9lBdRcLC/12DHByT84nd9RAdL5ZW/FJGz9y3wKZZRKq4XIUUqZaH2XtZxb8ZgqOqKVbCpjAtISlcWGykV/zGbp/qP1+2rBcVBCphSl8kDYChpmwRPP2rYQul7eIGZsoReTQxMS2epH2jjqLcpLMv8/Cd5lKB1rer8fkpxiz0xfn6EsQXVTaQwVnjbpOyebXxUuZ3nf0vZUX2GtFFMB2FJ9KCmUptU/Z8a1Ek7c66c96jOSc+n47jpDuaX+m1YLx+e5CFmqvb5R2xAXWzC5V"}};
+const SLOTS = [
+  {id:'wooju', name:'허우주의 비밀 기록', icon:'💰'},
+  {id:'gichan', name:'탁기찬의 비밀 기록', icon:'📷'},
+  {id:'jaun', name:'맹자운의 비밀 기록', icon:'🛋️'},
+  {id:'rival', name:'라이벌의 비밀', icon:'⚔'},
+  {id:'illust', name:'특별 일러스트', icon:'🖼'},
+  {id:'side', name:'남주 시점 외전', icon:'📜'},
+  {id:'ending', name:'엔딩 갤러리', icon:'🎬'},
+  {id:'bonus', name:'제작자 보너스', icon:'🕋'},
+];
+
+/* ================= storage (safe) ================= */
+const store = {
+  get(k,d){try{const v=localStorage.getItem('hv_'+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('hv_'+k,JSON.stringify(v))}catch(e){}},
+  del(k){try{localStorage.removeItem('hv_'+k)}catch(e){}}
+};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ================= image with pixel placeholder ================= */
+function pimg(src,alt,emo,cls){
+  const ph=`<div class="ph ${cls||''}"><span class="emo">${emo||'🖼'}</span><span>${esc(alt)}</span></div>`;
+  if(!src) return ph;
+  return `<img src="${src}" alt="${esc(alt)}" loading="lazy" onerror="this.outerHTML=this.dataset.ph" data-ph='${ph.replace(/'/g,'&#39;')}'>`;
+}
+
+/* ================= settings ================= */
+const S = Object.assign({bgm:false,sfx:true,vol:60,day:'auto',anim:true}, store.get('set',{}));
+function saveS(){store.set('set',S)}
+function isNight(){ if(S.day==='day')return false; if(S.day==='night')return true; const h=new Date().getHours(); return h<6||h>=19; }
+function applyTheme(){
+  document.body.classList.toggle('night',isNight());
+  document.body.classList.toggle('noanim',!S.anim);
+  const bg=$('#titleBg'); const src=isNight()?ASSET.bg.night:ASSET.bg.day;
+  if(bg.dataset.src!==src){bg.dataset.src=src;bg.style.display='';bg.src=src;}
+}
+$('#titleBg').onerror=function(){this.style.display='none';if(!$('#stage .bgph')){const d=document.createElement('div');d.className='ph bgph';d.innerHTML='<span class="emo">🏠</span><span>해담빌라 외관</span>';$('#stage').prepend(d);}};
+
+/* ================= sound (8-bit synth, no files) ================= */
+let AC=null;
+function ac(){ if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}} return AC; }
+function tone(seq){ if(!S.sfx)return; const c=ac(); if(!c)return; const g0=S.vol/100*0.18; let t=c.currentTime;
+  seq.forEach(([f,d,type])=>{ const o=c.createOscillator(),g=c.createGain(); o.type=type||'square'; o.frequency.value=f; g.gain.setValueAtTime(g0,t); g.gain.exponentialRampToValueAtTime(0.0001,t+d); o.connect(g).connect(c.destination); o.start(t); o.stop(t+d+0.02); t+=d*0.9; }); }
+const SFX={
+  click:()=>tone([[660,.05]]),
+  up:()=>tone([[784,.07],[988,.07],[1319,.12]]),
+  down:()=>tone([[392,.1],[311,.16]]),
+  coin:()=>tone([[988,.06],[1319,.14]]),
+  err:()=>tone([[196,.12,'sawtooth'],[147,.18,'sawtooth']]),
+  unlock:()=>tone([[523,.08],[659,.08],[784,.08],[1047,.2]]),
+  ach:()=>tone([[659,.08],[784,.08],[988,.08],[1319,.1],[988,.06],[1319,.22]]),
+  snap:()=>tone([[1800,.03,'triangle'],[900,.05,'triangle']]),
+};
+const bgm=$('#bgm');
+function applyBgm(){
+  bgm.volume=S.vol/100;
+  if(S.bgm){ if(!bgm.src) bgm.src=ASSET.bgm; bgm.play().then(()=>{$('#bgmMsg').textContent=''}).catch(()=>{ $('#bgmMsg').textContent='BGM 파일을 불러오지 못했어요. (heartvilla/audio/bgm.mp3)'; S.bgm=false; saveS(); syncSet(); }); }
+  else bgm.pause();
+}
+bgm.onerror=()=>{ if(S.bgm){$('#bgmMsg').textContent='BGM 파일을 불러오지 못했어요. (heartvilla/audio/bgm.mp3)'; S.bgm=false; saveS(); syncSet();} };
+
+/* ================= navigation ================= */
+function go(id){ $$('.screen').forEach(s=>s.classList.toggle('on',s.id===id)); window.scrollTo(0,0); if(RENDER[id])RENDER[id](); try{history.replaceState(null,'','#'+id)}catch(e){} }
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.btn,.tab,.seg button,.sw,.slot,.hot,.thumbs button'); if(b) SFX.click();
+  const g=e.target.closest('[data-go]'); if(g){ go(g.dataset.go); return; }
+  if(e.target.closest('[data-act=start]')){ if(CONFIG.BLOOM_URL){ window.open(CONFIG.BLOOM_URL,'_blank','noopener'); } else { toast('🚧','본편 오픈 준비 중!','Bloom AI 작품이 공개되면 이 버튼으로 바로 이동합니다.'); } }
+});
+
+/* ================= toast & modal ================= */
+let toastT=null;
+function toast(i,t,d){ $('#toastI').textContent=i; $('#toastT').textContent=t; $('#toastD').textContent=d||''; const el=$('#toast'); el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),2600); }
+function ask(html,okTxt,cb){
+  $('#modalBody').innerHTML=html;
+  $('#modalRow').innerHTML=`<button class="btn" id="mNo">취소</button><button class="btn red" id="mYes">${okTxt}</button>`;
+  $('#modal').classList.add('on'); $('#mYes').focus();
+  $('#mNo').onclick=()=>$('#modal').classList.remove('on');
+  $('#mYes').onclick=()=>{$('#modal').classList.remove('on'); cb();};
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')$('#modal').classList.remove('on'); });
+
+/* ================= data ================= */
+const MEN = {
+  wooju:{name:'허우주',emo:'💰',age:28,h:189,job:'1층 잡화점 \'우주상회\' 사장',home:'우주상회 안쪽 쪽방',look:'청흑색 리프컷, 날카로운 황갈색 눈. 다림질한 셔츠와 손목시계.',
+    core:'사람보다 돈에 먼저 설레는 남자. 금전적 기쁨을 사랑의 두근거림으로 착각한다.',
+    per:'계산이 빠르고 부지런하며 약속과 장부는 칼같이 지킨다. 빌리거나 동정받는 건 질색이지만, 자발적인 선물과 정당한 수익엔 진심으로 감동한다. 영수증은 날짜별로 모은다.',
+    line:'입금 확인했습니다. ……이상하군요, 심장이 빨리 뜁니다.',
+    like:'현금, 매출, 할인 정보, 새로운 수익 기회', hate:'불필요한 지출 강요', worst:'빌린 돈을 갚지 않는 행동',
+    rival:'채도희', rivalH:7.0,
+    flow:[['0~3','손님·거래처 대우'],['4~6','당신을 \'우량 고객\'으로 따로 챙기며 할인해 준다'],['7','노골적 구애. 여전히 돈 얘기'],['8~10','연애해도 데이트 비용은 엑셀로 정산한다']]},
+  gichan:{name:'탁기찬',emo:'📷',age:29,h:187,job:'여행·일상 파워블로거',home:'빌라 앞 공터의 캠핑카',look:'탈색 금발 댄디컷, 흑안, 한쪽만 올라가는 입꼬리, 목에 건 카메라.',
+    core:'입은 경박한데 행동은 다정하다. 자기를 웃기는 사람한테 진다.',
+    per:'누구와도 금방 친해지는 분위기 메이커. 사진 구도는 엉망인데 글이 웃겨 구독자가 많다. 웃음 뒤에 진지한 얘기를 숨기고, 혼자 있을 땐 의외로 조용하다.',
+    line:'오졌다. 야, 너 진짜 웃긴다.',
+    like:'드립 받아치기, 자신을 진심으로 웃기는 행동', hate:'캠핑카 생활을 깔보는 행동', worst:'진지한 비밀을 공개적으로 웃음거리로 만드는 행동',
+    rival:'기설아', rivalH:6.0,
+    flow:[['0~3','누구에게나 하듯 농담'],['4~6','당신의 취향과 웃음 포인트를 기억한다'],['7','농담하다 진심이 새어 나와 당황한다'],['8~10','능글맞음은 그대로. 블로그에 당신을 \'공동 운영자\'로 올린다']]},
+  jaun:{name:'맹자운',emo:'🛋️',age:26,h:191,job:'재택 프리랜서 일러스트레이터',home:'302호',look:'실버 블루그레이 허쉬컷, 반쯤 감긴 회보라색 눈, 오버핏 후드.',
+    core:'움직이지 않아도 되게 해 주는 사람에게 설렌다.',
+    per:'외출·집안일·대화까지 다 귀찮다. 그림 앞에서만은 몇 시간이고 집중하며 업계가 재능을 인정한다. 도움을 받으면 진심으로 감동하고, 거짓말은 못 한다.',
+    line:'……고마워. ……문 닫고 가.',
+    like:'귀찮은 일을 대신 해결해 주는 행동', hate:'쉬는 날 외출 강요', worst:'동의 없는 장거리 여행',
+    rival:'노은솔', rivalH:6.0,
+    flow:[['0~3','만남 자체를 귀찮아함'],['4~6','당신이 오면 덜 귀찮아하고 문을 끝까지 연다'],['7','곁에 두고 싶어 하지만 움직이는 건 여전히 귀찮음'],['8~10','귀차니즘 그대로. 대신 소파에 당신 자리만 비워 둔다']]},
+};
+const RIV = [
+  {id:'dohee',name:'채도희',emo:'💼',age:34,info:'해담빌라 건물주 겸 우주상회 투자자. 흑발 단발, 진한 립, 정장 코트. 우아하고 여유로운 사업가.',vs:'허우주',h:7.0,line:'아가씨, 우주 씨 시간은 비싸요.'},
+  {id:'seola',name:'기설아',emo:'🎀',age:27,info:'원작 여주인공이자 당신의 언니. 201호. 밝은 갈색 긴 머리, 완벽한 미소. 다정하고 사교적이지만 공략을 자꾸 방해한다.',vs:'탁기찬',h:6.0,line:'그거 언니 거야~'},
+  {id:'eunsol',name:'노은솔',emo:'🍱',age:25,info:'301호. 낮게 묶은 밤색 머리, 앞치마와 반찬통. 살림 솜씨가 좋고 자운을 살뜰히 챙긴다.',vs:'맹자운',h:6.0,line:'자운 씨는 제가 챙기니까 신경 안 쓰셔도 돼요~'},
+];
+const PLACES = {
+  roof:{name:'옥상',img:['roof'],who:'주민 공동 공간',desc:'빨래줄과 평상, 저녁이면 켜지는 전구 줄. 빌라 사람들이 고기를 굽거나 별을 보러 올라온다.',link:null},
+  r301:{name:'301호',img:['r301'],who:'노은솔',desc:'햇살 잘 드는 정갈한 방. 현관 앞엔 늘 반찬통이 준비되어 있다.',link:'rivals'},
+  r302:{name:'302호',img:['r302'],who:'맹자운',desc:'암막 커튼과 모니터 불빛. 소파 반경 1m 안에 충전기·과자·태블릿이 전부 있다.',link:'jaun'},
+  r201:{name:'201호',img:['r201'],who:'기설아 · 당신',desc:'자매가 함께 쓰는 집. 천장엔 누렇게 바랜 야광별 스티커.',link:'rivals'},
+  r202:{name:'202호',img:['r202'],who:'—',desc:'오래 비어 있는 집. 문은 잠겨 있다.',locked:true,link:null},
+  store:{name:'우주상회',img:['store'],who:'허우주',desc:'1층 잡화점. 계산대 옆엔 \'외상 사절, 현금 환영\'. 모든 상품에 원가와 마진이 연필로 작게 적혀 있다. 가게 안쪽 쪽방이 사장님 집.',link:'wooju'},
+  lobby:{name:'빌라 로비',img:['lobby'],who:'—',desc:'우편함과 낡은 벤치. 주민 단톡방 공지가 프린트되어 붙어 있다.',link:null},
+  camper:{name:'캠핑카',img:['camperOut','camperIn'],who:'탁기찬',desc:'빌라 앞 공터. 옆면엔 \'오늘도 기찬 하루\' 스티커, 앞엔 접이식 의자 두 개. 안은 기념품과 과자로 어수선하다.',link:'gichan'},
+};
+const HOT = [ // 단면도 이미지 위 클릭 영역(%)
+  ['roof',11.7,5.9,84.6,13.7],['r301',11.7,23,32.6,18.6],['r302',56.6,23,37.1,18.6],
+  ['r201',11.7,43.5,32.6,18],['r202',56.6,43.5,37.1,18],['store',11.7,63.5,32.6,23],['lobby',56.6,63.5,37.1,23]];
+const PUBLIC_PLACES = Object.keys(PLACES).filter(k=>!PLACES[k].locked);
+
+/* ================= achievements ================= */
+const ACH_WEB = [
+  {id:'wooju3',i:'💰',t:'입금이 곧 사랑',d:'허우주 체험판 호감도 3.0 달성'},
+  {id:'gichan3',i:'📷',t:'드립 천재',d:'탁기찬 체험판 호감도 3.0 달성'},
+  {id:'jaun3',i:'🛋️',t:'인간 리모컨',d:'맹자운 체험판 호감도 3.0 달성'},
+  {id:'all3',i:'👑',t:'엑스트라의 반란',d:'세 남주 체험판 모두 완료'},
+  {id:'broke',i:'💸',t:'잔액이 부족합니다',d:'소지금이 0G가 됨'},
+  {id:'zero',i:'💔',t:'공략 실패',d:'호감도가 0.0에 도달',hide:true},
+  {id:'tour',i:'🏡',t:'해담빌라 탐방 완료',d:'지도 내 공개 장소 모두 방문'},
+  {id:'poke',i:'👆',t:'관찰자',d:'타이틀 화면의 주민 여섯 명을 모두 눌러 봄',hide:true},
+];
+const ACH_MAIN = SLOTS.map(s=>({id:'m_'+s.id,i:s.icon,t:s.name+' 해금',d:'본편 🔑 코드로 해금'}));
+let ACH = store.get('ach',{});
+function unlockAch(id){
+  if(ACH[id]) return; ACH[id]=Date.now(); store.set('ach',ACH);
+  const a=[...ACH_WEB,...ACH_MAIN].find(x=>x.id===id); if(!a) return;
+  SFX.ach(); toast(a.i,'업적 달성! '+a.t,a.d);
+  if(['wooju3','gichan3','jaun3'].every(k=>ACH[k])) setTimeout(()=>unlockAch('all3'),2700);
+}
+
+/* ================= TITLE ================= */
+const ACTORS = [
+  {id:'wooju',cls:'a-wooju',src:ASSET.sprite.wooju,say:['입금 확인했습니다.','현금이면 더 좋겠습니다.','……오늘 매출, 아름답군요.'],fx:'coin'},
+  {id:'dohee',cls:'a-dohee',src:ASSET.sprite.dohee,say:['아가씨, 시간은 돈이에요.','우주 씨는 바빠요.'],fx:'spark'},
+  {id:'gichan',cls:'a-gichan',src:ASSET.sprite.gichan,say:['찰칵! 오졌다~','이거 블로그 각이다.','다 깨라, 다 깨~'],fx:'flash'},
+  {id:'eunsol',cls:'a-eunsol',src:ASSET.sprite.eunsol,say:['자운 씨 반찬이에요~','어머, 보셨어요? ///'],fx:'blush'},
+  {id:'seola',cls:'a-seola',src:ASSET.sprite.seola,say:['그거 언니 거야~','어머, 거긴 가지 마~'],fx:'heart'},
+  {id:'jaun',cls:'a-jaun sofa',src:ASSET.sprite.jaunSleep,say:['……귀찮아.','……깨우지 마.','……문 닫고 가.'],fx:'zzz'},
+];
+let poked = new Set(store.get('poked',[]));
+function buildActors(){
+  const wrap=$('#actors');
+  wrap.innerHTML=ACTORS.map(a=>`<div class="actor ${a.cls}" data-actor="${a.id}" role="button" tabindex="0" aria-label="${a.id}">${pimg(a.src,a.id,MEN[a.id]?MEN[a.id].emo:(RIV.find(r=>r.id===a.id)||{}).emo)}${a.id==='jaun'?'<span class="zzz">z</span>':''}<span class="bub"></span></div>`).join('');
+  wrap.querySelectorAll('.actor').forEach(el=>{
+    const a=ACTORS.find(x=>x.id===el.dataset.actor);
+    const fire=()=>{
+      const b=el.querySelector('.bub'); b.textContent=a.say[Math.floor(Math.random()*a.say.length)]; b.classList.add('on'); setTimeout(()=>b.classList.remove('on'),1600);
+      const st=$('#stage').getBoundingClientRect(), r=el.getBoundingClientRect();
+      const x=r.left-st.left+r.width/2, y=r.top-st.top+10;
+      const put=(ch,dx)=>{const f=document.createElement('span');f.className='fx';f.textContent=ch;f.style.left=(x-9)+'px';f.style.top=y+'px';f.style.setProperty('--dx',(dx||0)+'px');$('#stage').appendChild(f);setTimeout(()=>f.remove(),1100);};
+      if(a.fx==='coin'){SFX.coin();[-18,0,18].forEach((d,i)=>setTimeout(()=>put('🪙',d),i*90));}
+      if(a.fx==='flash'){SFX.snap();const f=document.createElement('div');f.className='flash';$('#stage').appendChild(f);setTimeout(()=>f.remove(),400);put('😆',8);}
+      if(a.fx==='zzz'){SFX.down();put('💢',10);}
+      if(a.fx==='spark'){SFX.coin();put('💼',-10);put('✨',14);}
+      if(a.fx==='heart'){SFX.up();put('😉',-10);put('💗',12);}
+      if(a.fx==='blush'){SFX.up();put('☺️',0);}
+      poked.add(a.id); store.set('poked',[...poked]); if(poked.size>=6) unlockAch('poke');
+    };
+    el.addEventListener('click',fire); el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fire();}});
+  });
+}
+function typeIntro(){
+  const el=$('#introSys'); el.classList.add('cursor');
+  const l1='[시스템] 《하트빌라》에 오신 것을 환영합니다.\n당신의 배역은 엑스트라입니다.\n공략 가능 대상: 0명 ...?';
+  const l2='[시스템] 근처에서 공략 가능 대상 3명이 감지되었습니다.';
+  if(!S.anim){ el.textContent=l2; el.classList.remove('cursor'); return; }
+  let i=0; el.textContent='';
+  const t=setInterval(()=>{ el.textContent=l1.slice(0,++i); if(i>=l1.length){clearInterval(t); setTimeout(()=>{ el.textContent='[시스템] 공략 가능 대상: 0명 → 3명'; SFX.up(); setTimeout(()=>{el.textContent=l2; el.classList.remove('cursor');},1300);},1200);} },38);
+}
+
+/* ================= DEX ================= */
+let dexCur='wooju';
+function heartsHTML(v,max){ let h=''; for(let i=1;i<=max;i++){ h+=`<i class="hp ${v>=i?'f':v>=i-0.5?'h':'e'}"></i>`; } return `<span class="hearts" aria-label="${v} / ${max}">${h}</span>`; }
+function renderDex(id){
+  if(id) dexCur=id; const m=MEN[dexCur];
+  $('#dexTabs').innerHTML=Object.keys(MEN).map(k=>`<button class="tab ${k===dexCur?'on':''}" data-dex="${k}">${MEN[k].emo} ${MEN[k].name}</button>`).join('');
+  const secretOpen=!!UNL[dexCur];
+  const endImg=ASSET.ending[dexCur];
+  $('#dexBody').innerHTML=`<div class="dex">
+    <div><div class="port"><span class="badge">TARGET</span>${pimg(ASSET.portrait[dexCur],m.name,m.emo)}</div>
+      <div class="spr">${pimg(ASSET.sprite[dexCur],m.name+' 도트',m.emo)}</div></div>
+    <div>
+      <h3 style="font-size:22px">${m.emo} ${m.name}</h3>
+      <dl class="kv"><dt>나이 / 키</dt><dd>${m.age}세 / ${m.h}cm</dd><dt>직업</dt><dd>${m.job}</dd><dt>거주지</dt><dd>${m.home}</dd><dt>외형</dt><dd>${m.look}</dd></dl>
+      <div class="quote">“${m.line}”</div>
+      <p><b>핵심</b> · ${m.core}</p><p style="margin-top:4px">${m.per}</p>
+      <div style="margin:8px 0"><span class="tag">❤️ 좋아함</span>${m.like}<br><span class="tag red">💔 싫어함</span>${m.hate}<br><span class="tag blk">🖤 최악의 지뢰</span>${m.worst}</div>
+      <div class="parch" style="margin:8px 2px"><b>호감도별 관계 변화</b><ul class="flow">${m.flow.map(f=>`<li><b>♥ ${f[0]}</b><span>${f[1]}</span></li>`).join('')}</ul></div>
+      <div class="mini-row"><span>내 초기 호감도 <b>1.0</b></span>${heartsHTML(1,10)}</div>
+      <div class="mini-row" style="margin-top:4px"><span>라이벌 <b>${m.rival}</b> <b>${m.rivalH.toFixed(1)}</b></span>${heartsHTML(m.rivalH,10)}</div>
+      <div class="lock" style="margin-top:12px"><span class="k">${secretOpen?'🔓':'🔒'}</span><div><b>비밀 슬롯</b><br><span class="muted" style="color:#c9b49a">${secretOpen?'히든 콘텐츠에서 열람할 수 있어요.':'??? · 본편에서 무언가를 알아내야 열립니다.'}</span></div>${secretOpen?'<button class="btn small" data-go="vault" style="margin-left:auto">열람</button>':''}</div>
+      <div class="lock"><span class="k">${UNL.ending&&endImg?'🎬':'🔒'}</span><div><b>엔딩 일러스트</b><br><span class="muted" style="color:#c9b49a">${UNL.ending?(endImg?'':'해금됨 · 일러스트 준비 중'):'??? · 엔딩을 본 사람만'}</span></div></div>
+      ${UNL.ending&&endImg?`<div class="port" style="aspect-ratio:16/9;margin-top:8px">${pimg(endImg,m.name+' 엔딩',m.emo)}</div>`:''}
+    </div></div>`;
+  $$('#dexTabs [data-dex]').forEach(b=>b.onclick=()=>renderDex(b.dataset.dex));
+  $$('#dexBody [data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+}
+
+/* ================= RIVALS ================= */
+function renderRivals(){
+  $('#rivalList').innerHTML=RIV.map(r=>`<div class="rcard"><div class="port">${pimg(ASSET.portrait[r.id],r.name,r.emo)}</div>
+    <h3 style="margin-top:10px">${r.emo} ${r.name} <span class="muted">${r.age}세</span></h3>
+    <p style="font-size:13px">${r.info}</p>
+    <div class="quote">“${r.line}”</div>
+    <div class="mini-row"><span>경쟁 상대 <b>${r.vs}</b></span></div>
+    <div class="mini-row"><span>초기 호감도</span>${heartsHTML(r.h,10)}<b>${r.h.toFixed(1)}</b></div>
+    <div class="lock"><span class="k">🔒</span><div><b>???</b><br><span class="muted" style="color:#c9b49a">이 사람에게도 사정이 있다.</span></div></div></div>`).join('');
+}
+
+/* ================= MAP ================= */
+let VISIT = new Set(store.get('visit',[]));
+let placeCur=null, placeImg=0;
+function renderMap(){
+  const w=$('#mapwrap'); const img=$('#mapImg');
+  if(!img.dataset.set){ img.dataset.set=1; img.onerror=()=>{img.style.display='none';w.classList.add('noimg')}; img.src=ASSET.bg.map; }
+  w.querySelectorAll('.hot').forEach(h=>h.remove());
+  HOT.forEach(([id,l,t,wd,ht])=>{ const p=PLACES[id]; const b=document.createElement('button'); b.className='hot'+(VISIT.has(id)?' seen':'')+(p.locked?' locked':''); b.style.cssText=`left:${l}%;top:${t}%;width:${wd}%;height:${ht}%`; b.innerHTML=`<span>${p.locked?'🔒 ':''}${p.name}</span>`; b.onclick=()=>showPlace(id); w.appendChild(b); });
+  $('#visitCount').textContent=`(${[...VISIT].filter(v=>PUBLIC_PLACES.includes(v)).length}/${PUBLIC_PLACES.length})`;
+  if(placeCur) showPlace(placeCur,true);
+}
+function showPlace(id,silent){
+  placeCur=id; const p=PLACES[id]; if(!silent) placeImg=0;
+  if(!p.locked && !VISIT.has(id)){ VISIT.add(id); store.set('visit',[...VISIT]); if(PUBLIC_PLACES.every(k=>VISIT.has(k))) unlockAch('tour'); }
+  const src=ASSET.bg[p.img[placeImg]];
+  const linkBtn=p.link?(MEN[p.link]?`<button class="btn small" data-dexgo="${p.link}">♥ ${MEN[p.link].name} 도감</button>`:`<button class="btn small" data-go="${p.link}">⚔ 라이벌 도감</button>`):'';
+  $('#placeBox').innerHTML=`<div class="place"><div><div class="pimg ${p.locked?'locked':''}">${pimg(src,p.name,p.locked?'🔒':'🏠')}${p.locked?'<span class="lk">🔒</span>':''}</div>
+    ${p.img.length>1?`<div class="thumbs">${p.img.map((k,i)=>`<button class="${i===placeImg?'on':''}" data-pi="${i}" aria-label="${i?'내부':'외부'}">${pimg(ASSET.bg[k],i?'내부':'외부','🚐')}</button>`).join('')}</div>`:''}</div>
+    <div class="parch" style="margin:0"><h3>${p.locked?'🔒 ':''}${p.name}</h3><p class="muted">거주 · ${p.who}</p><p style="margin:6px 0">${p.desc}</p>
+    ${p.locked?'<div class="sys" style="margin:6px 0">[시스템] 아직 들어갈 수 없는 장소입니다.</div>':''}${linkBtn}</div></div>`;
+  $$('#placeBox [data-pi]').forEach(b=>b.onclick=()=>{placeImg=+b.dataset.pi; showPlace(id,true);});
+  $$('#placeBox [data-dexgo]').forEach(b=>b.onclick=()=>{go('dex'); renderDex(b.dataset.dexgo);});
+  $$('#placeBox [data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+  $$('#mapwrap .hot').forEach((h,i)=>h.classList.toggle('seen',VISIT.has(HOT[i][0])));
+  $('#visitCount').textContent=`(${[...VISIT].filter(v=>PUBLIC_PLACES.includes(v)).length}/${PUBLIC_PLACES.length})`;
+  if(!silent) $('#placeBox').scrollIntoView({behavior:S.anim?'smooth':'auto',block:'nearest'});
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-place]'); if(b) showPlace(b.dataset.place);});
+
+/* ================= GUIDE ================= */
+const GUIDE = {
+  '기본 호감도':`<table class="tbl"><tr><th>항목</th><th>규칙</th></tr>
+    <tr><td>범위</td><td>남주별 0.0 ~ 10.0 · 0.5 단위</td></tr><tr><td>초기값</td><td>1.0</td></tr>
+    <tr><td>❤️ 선호 행동</td><td>+0.5</td></tr><tr><td>❤️ 결정적 선호 행동</td><td>+1.0</td></tr>
+    <tr><td>💔 비선호 행동</td><td>-0.5</td></tr><tr><td>🖤 최악의 지뢰</td><td>-1.0 (한 사건에 한 번)</td></tr>
+    <tr><td>반복</td><td>같은 방식은 두 번째부터 상승 없음</td></tr><tr><td>하루 상한</td><td>남주 한 명당 최대 +1.0</td></tr>
+    <tr><td>예외</td><td>평범한 대화·시간 경과·단순한 만남만으로는 오르지 않음</td></tr></table>
+    <h3 style="margin-top:12px">관계 단계</h3>
+    <table class="tbl"><tr><td>♥ 0~3</td><td>기본 관계</td></tr><tr><td>♥ 4~5</td><td>관심 증가</td></tr><tr><td>♥ 6</td><td>설렘과 당황</td></tr><tr><td>♥ 7</td><td>적극적인 호감 표현</td></tr><tr><td>♥ 8~10</td><td>교제 관계</td></tr></table>
+    <div class="sys">[시스템] 교제 전 최대 호감도는 7.0입니다. 넘치는 상승분은 사라집니다.
+8 이상은 당신이 고백하고 남주가 수락해야 열립니다. 남주별 자세한 변화는 도감을 확인하세요.</div>`,
+  '선호 행동':`${Object.values(MEN).map(m=>`<div class="parch"><h3>${m.emo} ${m.name}</h3><span class="tag">❤️</span>${m.like}<br><span class="tag red">💔</span>${m.hate}<br><span class="tag blk">🖤</span>${m.worst}</div>`).join('')}
+    <p class="muted" style="margin:0 4px">구체적으로 무엇이 '결정적'인지는 직접 알아내 보세요.</p>`,
+  '라이벌 경쟁':`<ul style="padding-left:18px">
+    <li>라이벌 호감도(남주 → 라이벌)는 당신과 따로 쌓이며, 교제 전 최대 9.0입니다.</li>
+    <li>시작값: 채도희 7.0 · 기설아 6.0 · 노은솔 6.0.</li>
+    <li>라이벌은 당신과 상관없이 남주를 만나고 선물을 주며 관계를 발전시킵니다. 단 장면에 등장한 날에만, 하루 최대 +0.5.</li>
+    <li>라이벌도 남주의 선호·비선호 규칙을 똑같이 적용받습니다. 같은 판에서 당신이 이기면 라이벌 -0.5.</li>
+    <li>라이벌 호감도가 9.0이고 당신보다 높으면 라이벌이 고백할 수 있고, 남주가 수락하면 실제로 커플이 됩니다.</li></ul>
+    <h3 style="margin-top:12px">⚠️ 뺏기</h3>
+    <ul style="padding-left:18px"><li>남주가 라이벌과 사귀는 중에도 당신의 호감도는 7.0까지 쌓입니다. 남주는 선을 지키지만 좋아하는 행동엔 여전히 반응합니다.</li>
+    <li>어떤 조건이 겹치면 남주가 <b>⚠️ 흔들림</b> 상태가 됩니다. 그때 고백하면, 남주는 라이벌과 먼저 정리한 뒤 대답합니다. (바람은 없습니다)</li></ul>`,
+  '교제':`<ul style="padding-left:18px"><li>호감도 7.0에서 당신이 고백하고 남주가 수락하면 교제가 시작되고, 8~10이 열립니다.</li>
+    <li>여러 남주와 동시에 교제할 수 있습니다. 남주들은 서로의 교제 사실을 모릅니다. ……아직은.</li>
+    <li>교제 여부와 호감도는 남주마다 따로 관리됩니다.</li>
+    <li>호감도 10에 도달하면 엔딩이 열립니다. 그다음엔 [시스템]이 당신에게 무언가를 묻습니다.</li></ul>`,
+  '문어발 이벤트':`<div class="sys">[시스템] 🐙 문어발 이벤트 — 둘 이상과 교제 중일 때 발생할 수 있습니다.</div>
+    <ul style="padding-left:18px"><li><b>들키는 경우</b>: 교제 중인 남주가 당신과 다른 남주의 애정 표현을 직접 보거나, 데이트가 같은 날 겹치거나, 누군가(특히 언니)가 폭로하면.</li>
+    <li><b>들키면</b>: 이벤트가 강제로 실행되고, 사실을 안 남주의 호감도가 2.0이 됩니다. 교제는 유지되지만 🐙 냉전 상태.</li>
+    <li><b>냉전 중</b>: 결정적 선호 행동만 +0.5. 7.0까지 다시 쌓은 뒤 진심으로 사과하면 8.0으로 돌아오며 냉전이 풀립니다.</li>
+    <li><b>두 번째로 들키면</b>: 호감도 0.0, 교제 종료.</li></ul>`,
+  '자주 묻는 질문':`<dl class="faq">
+    <dt>홈페이지 체험판 호감도가 본편에 이어지나요?</dt><dd>아니요. 체험판은 이 홈페이지 안에서만 저장됩니다.</dd>
+    <dt>같은 선물을 계속 주면 계속 오르나요?</dt><dd>같은 방식은 두 번째부터 오르지 않아요. 남주마다 하루 최대 +1.0이에요.</dd>
+    <dt>교제 전인데 호감도가 7에서 안 올라가요.</dt><dd>정상이에요. 8부터는 고백과 수락이 필요해요.</dd>
+    <dt>세 명이랑 다 사귀어도 돼요?</dt><dd>돼요. 다만 🐙 문어발 이벤트를 조심하세요.</dd>
+    <dt>언니가 자꾸 공략 팁을 주는데 믿어도 돼요?</dt><dd>……글쎄요?</dd>
+    <dt>히든 콘텐츠 코드는 어디서 얻나요?</dt><dd>본편에서 특정한 순간에 [시스템]이 알려 줍니다. 어떤 순간인지는 비밀이에요.</dd>
+    <dt>OOC로 이야기를 바꿔도 되나요?</dt><dd>연출·문체·분량 요청은 가능해요. 비밀 공개는 반영되지 않아요.</dd></dl>`,
+};
+let guideCur='기본 호감도';
+function renderGuide(k){ if(k) guideCur=k;
+  $('#guideTabs').innerHTML=Object.keys(GUIDE).map(t=>`<button class="tab ${t===guideCur?'on':''}" data-gd="${t}">${t}</button>`).join('');
+  $('#guideBody').innerHTML=`<div class="parch">${GUIDE[guideCur]}</div>`;
+  $$('#guideTabs [data-gd]').forEach(b=>b.onclick=()=>renderGuide(b.dataset.gd)); }
+
+/* ================= TRIAL ================= */
+const T_MAX=3.0, AP_MAX=5, DAY_CAP=1.0;
+const T0=()=>({day:1,gold:10000,ap:AP_MAX,h:{wooju:1,gichan:1,jaun:1},gain:{wooju:0,gichan:0,jaun:0},used:{},done:{},cur:null,q:{gichan:null,jaun:null},log:['[시스템] 체험판을 시작합니다. 1일차 · 소지금 10,000G · 행동력 5']});
+let TS=Object.assign(T0(),store.get('trial',{}));
+function saveT(){store.set('trial',TS)}
+function tlog(s){TS.log.unshift(s); TS.log=TS.log.slice(0,40); saveT();}
+const WOOJU_ACTS=[
+  {id:'buy',t:'현금으로 우유 사기',cost:2300,d:+0.5,say:'2,300원, 현금. ……정확하군요. 거스름돈이 필요 없는 손님은 귀합니다.'},
+  {id:'snack',t:'현금으로 과자 한 봉지 더',cost:1500,d:+0.5,say:'추가 구매 감사합니다. 객단가가 올라가는 소리가 들리는군요.'},
+  {id:'sale',t:'옆 동네 마트 할인 정보 알려 주기',cost:0,d:+0.5,say:'……1+1이 내일까지라고요? 메모하겠습니다. 정보도 자산입니다.'},
+  {id:'idea',t:'새 수익 아이디어 제안: 택배 보관 서비스',cost:0,d:+1.0,say:'보관료를 받는다…… 302호가 이미 고객이군요. 당신, 사업 감각이 있습니다. ……심장이 빨리 뜁니다.'},
+  {id:'credit',t:'"외상으로 해 주세요"',cost:0,d:-0.5,say:'계산대 옆 글씨, 보이십니까? 외상 사절입니다.'},
+  {id:'waste',t:'"사장님, 오늘 회식 한우로 쏴요!"',cost:0,d:-0.5,say:'이 돈이면 적금을 하나 더 들 수 있었는데요.'},
+];
+const GICHAN_Q=[
+  {q:'라면 사진을 찍었는데 엄지만 나왔어. 제목 지어 봐.',a:[['엄지 척. 맛도 최고, 구도도 최고라는 뜻.',1.0,'오졌다 ㅋㅋㅋ 그거 제목으로 쓴다. 저작권료는 라면 반 줄게.'],['그냥 다시 찍어.',0,'어…… 맞는 말인데 재미가 없네?'],['캠핑카 사는 사람 사진이 다 그렇지 뭐.',-0.5,'왜, 바퀴 달린 집 처음 봐? 집도 상처받아.']]},
+  {q:'내가 오늘 삼각대를 세 번 넘어뜨렸거든. 이거 무슨 뜻일까?',a:[['삼각대가 너한테 세 번 절한 거지. 존경의 표시.',1.0,'와 ㅋㅋㅋ 나 오늘부터 삼각대한테 존경받는 남자다.'],['조심 좀 해.',0,'넵…… 잔소리 접수 완료.'],['원래 손재주 없잖아.',-0.5,'……팩트로 때리면 아프다?']]},
+  {q:'블로그 구독자가 오늘 딱 1명 늘었어. 축하해 줘.',a:[['그 한 명이 나야. 알림 설정까지 했어.',0.5,'뭐야 ㅋㅋㅋ 오늘 제일 좋은 소식이다.'],['오, 축하해.',0,'그치? 반응이 좀 담백하네.'],['1명이면 그냥 실수로 누른 거 아냐?',-0.5,'아…… 그럴 수도 있겠다. 상처받았다.']]},
+  {q:'캠핑카 이름 지어 줘. 지금은 그냥 \'캠핑카\'야.',a:[['기찬하우스. 바퀴 달린 집이라 이사비 0원.',0.5,'이사비 0원 ㅋㅋㅋ 우주 사장님이 좋아하겠다.'],['그냥 캠핑카가 낫지 않아?',0,'음, 미니멀하다 이거지.'],['고물차.',-0.5,'얘가 들으면 시동 안 걸려. 사과해.']]},
+  {q:'자운이 형한테 "살아 있어?"라고 보냈는데 답장이 "ㅇ"이야. 해석해 줘.',a:[['"ㅇ"은 \'응\'의 귀찮은 버전. 형 오늘 컨디션 최상이네.',1.0,'ㅋㅋㅋ 컨디션 최상 ㅋㅋㅋ 너 자운이 형 번역기냐?'],['살아 있대.',0,'그치, 그건 나도 알아.'],['형이 너 싫어하는 거 아냐?',-0.5,'……야, 그건 좀 무섭다.']]},
+  {q:'나 오늘 셀카 백 장 찍었는데 전부 흔들렸어.',a:[['흔들린 게 아니라 잔상 기법이야. 예술이지.',0.5,'잔상 기법 ㅋㅋㅋ 이제부터 그렇게 우길게.'],['다음엔 고정해 봐.',0,'오케이, 꿀팁 감사.'],['백 장 다 지워.',-0.5,'안 돼, 추억이야. 흔들린 추억.']]},
+];
+const JAUN_Q=[
+  {q:'……쓰레기봉투가 문 앞에 사흘째 있어. ……무거워.',a:[['말없이 들어서 분리수거장까지 버려 준다',0.5,'……버려 줬어? 고마워. 좋은 일 했네.'],['"같이 버리러 나가요!"',-0.5,'……나가면 다시 들어와야 되잖아. 두 번 움직여야 돼.'],['"내일 버리면 되죠."',0,'……응. 내일의 나한테 미룰게.']]},
+  {q:'……택배 상자가 현관을 막아서 못 나가. ……안 나가도 되긴 하는데.',a:[['상자를 다 뜯고 납작하게 접어 정리해 준다',1.0,'……어. 바닥이 보여. ……이상하다, 나 지금 좀 설레.'],['"저랑 택배 뜯기 시합해요!"',0,'……시합은 움직여야 되잖아.'],['"이참에 이사 가요. 지방으로."',-1.0,'……너 혼자 다녀와. 나한테 이런 거 시키지 마.']]},
+  {q:'……충전기가 저기 있어. 1미터 반. ……너무 멀어.',a:[['충전기를 가져다 손에 쥐여 준다',0.5,'……1미터 반을 아꼈어. 고마워.'],['"일어나서 가져가요. 운동돼요."',-0.5,'……운동은 다음 생에.'],['충전기 선을 늘려 준다며 멀티탭을 하나 더 산다',0.5,'……천재네. 이제 소파에서 다 닿아.']]},
+  {q:'……배고픈데 주문하려면 메뉴를 골라야 돼. ……고르는 게 귀찮아.',a:[['"제가 알아서 시킬게요. 문 앞에 두고 갈게요."',1.0,'……그거야. 그게 제일 좋아. ……너 여기 살면 안 돼?'],['"같이 먹으러 나가요!"',-0.5,'……밖은 춥고, 다시 들어와야 돼.'],['"라면 끓여 먹어요."',0,'……물 끓이는 것도 일이야.']]},
+  {q:'……마감 메일 답장해야 되는데 타자 치기 귀찮아.',a:[['불러 주는 대로 대신 타이핑해 준다',0.5,'……"네 확인했습니다"까지 쳐 줘. ……고마워.'],['"주말에 바다 보러 가요, 기분 전환!"',-0.5,'……바다는 사진으로 봐도 돼.'],['답장 대신 이모티콘 하나만 보내라고 한다',0,'……그것도 손 움직여야 돼.']]},
+];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;};
+function hpop(txt,good){ const r=$('#game').getBoundingClientRect(); const p=document.createElement('div'); p.className='pop'; p.textContent=txt; p.style.left=(r.left+r.width/2-20)+'px'; p.style.top=(r.top+20)+'px'; document.body.appendChild(p); setTimeout(()=>p.remove(),1150); if(!good){$('#game').classList.remove('shake');void $('#game').offsetWidth;$('#game').classList.add('shake');} }
+function applyHeart(who,d,actKey){
+  const name=MEN[who].name; let msg='', real=0;
+  const key=who+':'+actKey;
+  if(d>0 && TS.used[key]===TS.day){ msg=`[시스템] 같은 방식의 반복입니다. ${name} 호감도 변화 없음.`; }
+  else if(d>0 && TS.gain[who]>=DAY_CAP){ msg=`[시스템] 오늘 ${name}의 호감도 상승 한도(+1.0)에 도달했습니다.`; }
+  else if(d>0 && TS.h[who]>=T_MAX){ msg=`[시스템] 체험판 최대 호감도(${T_MAX.toFixed(1)})입니다.`; }
+  else {
+    if(d>0){ real=Math.min(d,DAY_CAP-TS.gain[who],T_MAX-TS.h[who]); TS.gain[who]+=real; }
+    else real=Math.max(d,-TS.h[who]);
+    TS.h[who]=Math.round((TS.h[who]+real)*2)/2;
+    msg = real>0?`[시스템] ❤️ +${real.toFixed(1)} ${name}`:real<0?`[시스템] ${d<=-1?'🖤':'💔'} ${real.toFixed(1)} ${name}`:`[시스템] ${name} 호감도 변화 없음.`;
+  }
+  if(d>0) TS.used[key]=TS.day;
+  tlog(msg);
+  if(real>0){SFX.up();hpop('💗',true);} else if(real<0){SFX.down();hpop('💔',false);}
+  if(TS.h[who]<=0) unlockAch('zero');
+  if(TS.h[who]>=T_MAX && !TS.done[who]){ TS.done[who]=1; saveT(); tlog(`[시스템] 🎉 ${name} 체험판 공략 완료!`); unlockAch(who+'3'); }
+  saveT();
+}
+function spendAP(){ if(TS.ap<=0){ SFX.err(); toast('⏳','행동력이 부족합니다','"다음 날" 버튼으로 회복하세요.'); return false;} TS.ap--; return true; }
+function renderTrial(){
+  $('#hud').innerHTML=`<span class="it">📅 ${TS.day}일차</span><span class="it">🪙 ${TS.gold.toLocaleString()}G</span><span class="it">⚡ <span class="ap">${Array.from({length:AP_MAX},(_,i)=>`<i class="${i<TS.ap?'':'x'}"></i>`).join('')}</span></span><button class="btn small green" id="nextDay" style="margin-left:auto">☀ 다음 날</button>`;
+  $('#nextDay').onclick=()=>{ TS.day++; TS.ap=AP_MAX; TS.gain={wooju:0,gichan:0,jaun:0}; tlog(`[시스템] ${TS.day}일차 아침입니다. 행동력이 회복되었습니다.`); SFX.up(); renderTrial(); };
+  $('#trio').innerHTML=Object.keys(MEN).map(k=>`<div class="tc ${TS.done[k]?'done':''}"><div class="av">${pimg(ASSET.portrait[k],MEN[k].name,MEN[k].emo)}</div>
+    <b>${MEN[k].emo} ${MEN[k].name}</b><div>${heartsHTML(TS.h[k],3)} <b>${TS.h[k].toFixed(1)}</b></div>
+    <div class="muted">오늘 +${TS.gain[k].toFixed(1)} / 1.0</div>
+    <button class="btn small ${TS.cur===k?'green':''}" data-tg="${k}">${k==='wooju'?'💰 입금 확인':k==='gichan'?'📷 드립 배틀':'🛋️ 귀찮음 해결'}</button></div>`).join('');
+  $$('#trio [data-tg]').forEach(b=>b.onclick=()=>{TS.cur=b.dataset.tg; saveT(); renderTrial();});
+  renderGame();
+  $('#tlog').textContent=TS.log.join('\n');
+}
+function who(k,line){ return `<div class="who"><div class="av">${pimg(ASSET.portrait[k],MEN[k].name,MEN[k].emo)}</div><div class="say"><span class="nm">${MEN[k].name}</span>${esc(line)}</div></div>`; }
+function renderGame(){
+  const g=$('#game'); const k=TS.cur;
+  if(!k){ g.innerHTML='<p>공략할 남주를 골라 주세요. 행동 하나에 ⚡ 1이 필요해요. 체험판 목표는 각 남주 <b>호감도 3.0</b>!</p>'; return; }
+  if(k==='wooju'){
+    g.innerHTML=who('wooju',TS.lastSay&&TS.lastSay.k==='wooju'?TS.lastSay.s:'어서 오십시오. 우주상회입니다. 카드는 수수료가 붙으니 현금이면 더 좋겠습니다.')+
+      `<div class="choices">${WOOJU_ACTS.map(a=>`<button class="btn" data-wa="${a.id}" ${a.cost>TS.gold?'disabled':''}><span>${a.t}</span><small>${a.cost?'-'+a.cost.toLocaleString()+'G · ':''}⚡1</small></button>`).join('')}</div>`;
+    $$('#game [data-wa]').forEach(b=>b.onclick=()=>{ const a=WOOJU_ACTS.find(x=>x.id===b.dataset.wa);
+      if(a.cost>TS.gold){SFX.err();toast('💸','잔액이 부족합니다','현금이 모자라요.');return;}
+      if(!spendAP()){return;}
+      if(a.cost){TS.gold-=a.cost; SFX.coin(); tlog(`[시스템] 🪙 -${a.cost.toLocaleString()}G`); if(TS.gold<=0) unlockAch('broke');}
+      TS.lastSay={k:'wooju',s:a.say}; applyHeart('wooju',a.d,a.id); renderTrial(); });
+    if(TS.gold<1500) g.insertAdjacentHTML('beforeend','<p class="muted" style="margin-top:6px">돈이 바닥나도 할인 정보나 수익 아이디어로는 공략할 수 있어요.</p>');
+    return;
+  }
+  const bank=k==='gichan'?GICHAN_Q:JAUN_Q;
+  if(TS.q[k]==null || !TS.q[k].order){ TS.q[k]={i:Math.floor(Math.random()*bank.length),order:shuffle([0,1,2]),res:null}; saveT(); }
+  const Q=bank[TS.q[k].i], st=TS.q[k];
+  const intro=st.res?st.res:Q.q;
+  g.innerHTML=who(k,intro)+(st.res?`<div class="choices"><button class="btn green" id="nextQ">▶ 다음 ${k==='gichan'?'드립':'부탁'}</button></div>`:
+    `<div class="choices">${st.order.map(i=>`<button class="btn" data-qa="${i}"><span>${esc(Q.a[i][0])}</span><small>⚡1</small></button>`).join('')}</div>`);
+  if(st.res){ $('#nextQ').onclick=()=>{ let n; do{n=Math.floor(Math.random()*bank.length)}while(n===st.i&&bank.length>1); TS.q[k]={i:n,order:shuffle([0,1,2]),res:null}; saveT(); renderGame(); }; return; }
+  $$('#game [data-qa]').forEach(b=>b.onclick=()=>{ if(!spendAP()) return; const a=Q.a[+b.dataset.qa];
+    st.res=a[2]; applyHeart(k,a[1],'q'+st.i+'_'+b.dataset.qa); renderTrial(); });
+}
+$('#trialReset').onclick=()=>ask('<h3>체험판을 처음부터 다시 할까요?</h3><p>날짜, 소지금, 호감도가 초기화됩니다. 이미 받은 업적은 남아요.</p>','초기화',()=>{TS=T0(); saveT(); SFX.down(); renderTrial();});
+
+/* ================= ACHIEVEMENTS ================= */
+function renderAch(){
+  const card=a=>{const on=!!ACH[a.id]; return `<div class="acard ${on?'':'off'}"><span class="i">${on?a.i:'🔒'}</span><div><b>${on||!a.hide?a.t:'???'}</b><span>${on||!a.hide?a.d:'숨겨진 업적'}</span></div></div>`;};
+  $('#achWeb').innerHTML=ACH_WEB.map(card).join('');
+  $('#achMain').innerHTML=ACH_MAIN.map(a=>{const on=!!ACH[a.id]; return `<div class="acard ${on?'':'off'}"><span class="i">${on?a.i:'🔒'}</span><div><b>${on?a.t:'??? 본편 업적'}</b><span>${on?'해금 완료':'본편에서 코드를 찾아보세요'}</span></div></div>`;}).join('');
+  const all=[...ACH_WEB,...ACH_MAIN]; $('#achCount').textContent=`(${all.filter(a=>ACH[a.id]).length}/${all.length})`;
+}
+
+/* ================= VAULT (WebCrypto) ================= */
+let UNL = store.get('unl',{});   // {slotId: decryptedHTML}
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const normCode=s=>s.normalize('NFC').replace(/\s+/g,'').toLowerCase();
+async function tryOpen(code,blob){
+  const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(blob.s),iterations:120000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(blob.i)},key,b64(blob.c));
+  return new TextDecoder().decode(pt);
+}
+const WRONG=['[시스템] 코드가 일치하지 않습니다. 우주 사장님이 계산기를 다시 두드립니다.','[시스템] 오류! 자운이 "……틀렸어." 하고 돌아눕습니다.','[시스템] 땡! 기찬: "아 망했다, 다 깨라 다 깨~"','[시스템] 언니가 웃으며 말합니다. "그거 아닌데~?"'];
+async function submitCode(){
+  const raw=$('#codeIn').value; const code=normCode(raw); const msg=$('#codeMsg');
+  if(!code){msg.textContent='코드를 입력해 주세요.';return;}
+  if(!window.crypto||!crypto.subtle){msg.textContent='이 브라우저에서는 해금 기능을 쓸 수 없어요. (https 주소에서 열어 주세요)';return;}
+  msg.textContent='[시스템] 확인 중……'; $('#codeBtn').disabled=true;
+  let hit=null;
+  for(const s of SLOTS){ const blob=SECRETS[s.id]; if(!blob) continue; try{ const html=await tryOpen(code,blob); hit={s,html}; break; }catch(e){} }
+  $('#codeBtn').disabled=false;
+  if(!hit){ SFX.err(); msg.textContent=WRONG[Math.floor(Math.random()*WRONG.length)]; $('#codeIn').classList.add('shake'); setTimeout(()=>$('#codeIn').classList.remove('shake'),400); return; }
+  const again=!!UNL[hit.s.id];
+  UNL[hit.s.id]=hit.html; store.set('unl',UNL); $('#codeIn').value='';
+  msg.textContent=again?`[시스템] 이미 해금한 콘텐츠예요: ${hit.s.name}`:`[시스템] 🔓 ${hit.s.name} 해금!`;
+  SFX.unlock(); unlockAch('m_'+hit.s.id); renderVault(); openSlot(hit.s.id);
+}
+function renderVault(){
+  $('#vaultList').innerHTML=SLOTS.map(s=>{const on=!!UNL[s.id]; return `<button class="slot ${on?'open':''}" data-slot="${s.id}"><span class="k">${on?s.icon:'🔒'}</span><b>${s.name}</b><span class="muted" style="${on?'':'color:#c9b49a'}">${on?'열람하기':'잠김 · 본편 코드 필요'}</span></button>`;}).join('');
+  $$('#vaultList [data-slot]').forEach(b=>b.onclick=()=>{ const id=b.dataset.slot; if(UNL[id]) openSlot(id); else { SFX.err(); $('#reader').innerHTML='<div class="sys">[시스템] 아직 해금되지 않은 콘텐츠입니다.\n본편에서 획득한 암호를 입력하세요.</div>'; $('#codeIn').focus(); } });
+}
+function openSlot(id){ const s=SLOTS.find(x=>x.id===id); $('#reader').innerHTML=`<div class="reader"><h3>${s.icon} ${s.name}</h3>${UNL[id]}</div>`; $('#reader').scrollIntoView({behavior:S.anim?'smooth':'auto',block:'nearest'}); }
+$('#codeBtn').onclick=submitCode; $('#codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')submitCode();});
+
+/* ================= SETTINGS ================= */
+function syncSet(){ $('#swBgm').classList.toggle('on',S.bgm); $('#swSfx').classList.toggle('on',S.sfx); $('#swAnim').classList.toggle('on',S.anim); $('#vol').value=S.vol; $$('#segDay button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.day)); }
+$('#swBgm').onclick=()=>{S.bgm=!S.bgm;saveS();syncSet();applyBgm();};
+$('#swSfx').onclick=()=>{S.sfx=!S.sfx;saveS();syncSet();SFX.click();};
+$('#swAnim').onclick=()=>{S.anim=!S.anim;saveS();syncSet();applyTheme();};
+$('#vol').oninput=e=>{S.vol=+e.target.value;saveS();bgm.volume=S.vol/100;};
+$('#vol').onchange=()=>SFX.coin();
+$$('#segDay button').forEach(b=>b.onclick=()=>{S.day=b.dataset.v;saveS();syncSet();applyTheme();});
+$('#wipeAll').onclick=()=>ask('<h3>저장 데이터를 전부 지울까요?</h3><p>체험판 진행도, 업적, 지도 방문 기록, 히든 해금 상태가 모두 사라집니다. 되돌릴 수 없어요.</p>','전부 지우기',()=>{
+  ['trial','ach','visit','unl','poked','set'].forEach(k=>store.del(k)); TS=T0(); ACH={}; VISIT=new Set(); UNL={}; poked=new Set();
+  Object.assign(S,{bgm:false,sfx:true,vol:60,day:'auto',anim:true}); bgm.pause(); syncSet(); applyTheme(); SFX.down(); toast('🗑','초기화 완료','처음 상태로 돌아갔어요.'); });
+
+/* ================= boot ================= */
+const RENDER={dex:()=>renderDex(),rivals:renderRivals,map:renderMap,guide:()=>renderGuide(),trial:renderTrial,achv:renderAch,vault:renderVault,settings:syncSet};
+applyTheme(); buildActors(); typeIntro(); syncSet();
+setInterval(()=>{ if(S.day==='auto') applyTheme(); },60000);
+const h0=(location.hash||'').slice(1); if(h0&&RENDER[h0]) go(h0);
+</script>
+</body>
+</html>
