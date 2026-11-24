@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ARCHIVO PRIVADO</title>
+<style>
+:root{--bg:#0c0c0d;--card:#151517;--line:#2a2a2e;--tx:#ececec;--sub:#8d8d93;--acc:#c9a26b;--red:#d0574a;--ok:#5fb37c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;word-break:keep-all;min-height:100vh}
+.wrap{max-width:720px;margin:auto;padding:28px 16px 56px}
+.top{display:flex;align-items:center;gap:12px;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.top svg{flex:none}
+.top{flex-wrap:wrap}.top h1{font-size:17px;letter-spacing:1.5px;white-space:nowrap}
+.top p{font-size:12px;color:var(--sub);margin-top:3px}
+
+.list{margin-top:14px;border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+.row{display:flex;align-items:center;gap:14px;padding:16px 18px;border-top:1px solid var(--line);cursor:pointer;color:inherit;text-decoration:none}
+.row:first-child{border-top:0}
+.row:hover{background:#1b1b1e}
+.row .ic{width:34px;height:34px;border-radius:10px;background:#1f1f23;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.row b{display:block;font-size:15px;font-weight:600}
+.row span{font-size:12px;color:var(--sub)}
+.row .no{margin-left:auto;font-size:12px;color:var(--sub)}
+.row.lock .ic{color:var(--acc)}
+.view{display:none}
+.view.on{display:block}
+.vh{display:flex;align-items:center;gap:10px;margin:22px 0 14px}
+.vh button{background:none;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:6px 12px;cursor:pointer;font-size:13px}
+.vh h2{font-size:18px}
+.vh small{color:var(--sub);font-size:12px;margin-left:auto}
+.es{display:block}
+.ko{display:block;color:var(--sub);font-size:.88em;margin-top:3px}
+body.notr .ko{display:none}
+.trbtn{position:sticky;top:10px;z-index:5;float:right;margin-top:-50px;background:#1f1f23;border:1px solid var(--line);color:var(--acc);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer}
+/* chat */
+.chat{background:#0f1613;border:1px solid #1f2b25;border-radius:16px;padding:14px 12px 18px;background-image:radial-gradient(#1a2620 1px,transparent 1px);background-size:18px 18px}
+.chathead{display:flex;align-items:center;gap:10px;padding:4px 4px 12px;border-bottom:1px solid #1f2b25;margin-bottom:10px}
+.chathead .av{width:38px;height:38px;border-radius:50%;overflow:hidden;flex:none}
+.chathead .av img{width:100%;height:100%;object-fit:cover}
+.chathead b{font-size:15px}.chathead span{font-size:11px;color:#7fa68f;display:block}
+.day{clear:both;text-align:center;margin:14px 0 8px;font-size:11px;color:#9fb5a9}
+.day::before,.day::after{content:"";display:inline-block;width:24px;height:1px;background:#2b3a32;vertical-align:middle;margin:0 8px}
+.msg{position:relative;max-width:78%;padding:8px 11px 18px;border-radius:12px;font-size:14px;line-height:1.5;margin:3px 0;clear:both}
+.msg.you{float:left;background:#1d2a23;border-top-left-radius:3px}
+.msg.me{float:right;background:#14513f;border-top-right-radius:3px}
+.msg .tm{position:absolute;right:9px;bottom:4px;font-size:10px;color:#9fb5a9}
+.msg.pic{padding:4px 4px 18px}
+.msg.pic img{display:block;width:220px;max-width:100%;border-radius:9px;cursor:zoom-in}
+.chat::after{content:"";display:block;clear:both}
+.seen{clear:both;text-align:right;font-size:10px;color:#9fb5a9;padding-top:4px}
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card img{display:block;width:100%;aspect-ratio:1;object-fit:cover;cursor:zoom-in;background:#1d1d20}
+.card figcaption{padding:10px 12px 12px;font-size:13px;line-height:1.5}
+.card figcaption b{display:block;font-size:11px;color:var(--acc);letter-spacing:.5px;margin-bottom:4px}
+.ov{position:relative}
+.note23{position:absolute;left:12%;right:12%;bottom:12%;display:flex;flex-direction:column;gap:2px;background:rgba(250,246,235,.92);color:#2e3a5e;padding:8px 10px;border-radius:4px;font-family:"Nanum Pen Script","Gaegu",cursive;font-size:17px;line-height:1.25;transform:rotate(-2deg);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+/* plan */
+.plan{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 16px;margin-bottom:14px}
+.plan li{list-style:none;display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
+.plan li:first-child{border-top:0}
+.plan i{flex:none;width:20px;height:20px;border:1.5px solid var(--sub);border-radius:5px;font-style:normal;font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.plan li.done i{background:var(--ok);border-color:var(--ok);color:#0c0c0d}
+.plan li.done b{text-decoration:line-through;text-decoration-color:#666}
+.pd{flex:none;width:84px;color:var(--sub);font-size:12px;padding-top:2px;font-variant-numeric:tabular-nums}
+.cd{display:flex;align-items:baseline;gap:10px;padding:14px 16px;border:1px solid #4a3b26;background:#1a1610;border-radius:14px;margin-bottom:14px}
+.cd b{white-space:nowrap;font-size:28px;color:var(--acc);font-variant-numeric:tabular-nums}
+.cd span{font-size:12px;color:var(--sub)}
+/* lock */
+.lockbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 20px;text-align:center}
+.lockbox .lk{font-size:30px}
+.lockbox p{color:var(--sub);font-size:13px;margin:10px 0 16px;line-height:1.6}
+.lockbox form{display:flex;gap:8px;max-width:320px;margin:auto}
+.lockbox input{flex:1;min-width:0;height:44px;border-radius:10px;border:1px solid var(--line);background:#0e0e10;color:var(--tx);text-align:center;font-size:18px;letter-spacing:8px;outline:none}
+.lockbox input:focus{border-color:var(--acc)}
+.lockbox button{height:44px;padding:0 18px;border:0;border-radius:10px;background:var(--acc);color:#141414;font-weight:700;cursor:pointer}
+.lockbox .err{color:var(--red);font-size:12px;min-height:18px;margin-top:8px}
+.shake{animation:sh .35s}
+@keyframes sh{25%,75%{transform:translateX(-6px)}50%{transform:translateX(6px)}}
+.lead{color:var(--sub);font-size:14px;line-height:1.7;margin-bottom:14px}
+/* chain */
+.chain{margin-top:16px;display:flex;flex-direction:column;gap:12px}
+.step{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;animation:fade .5s ease}
+.step.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.sh{font-size:12px;color:var(--acc);margin-bottom:8px;letter-spacing:.5px}
+.step img{display:block;width:100%;max-height:420px;object-fit:cover;border-radius:10px;cursor:zoom-in}
+.next{margin-top:10px;width:100%;height:42px;border-radius:10px;border:1px solid var(--acc);background:none;color:var(--acc);font-size:14px;cursor:pointer}
+.trans{margin-top:10px;font-size:14px;line-height:1.8;padding:10px 14px;background:#0e0e10;border-radius:10px}
+.trans b{font-size:11px;color:var(--sub)}
+.trans ol{padding-left:18px}.trans li span{color:var(--sub);font-size:.9em}
+.back{display:block;margin-top:10px;padding:16px;background:#e9e2d0;color:#3a2f22;border-radius:6px;font-family:"Nanum Pen Script","Gaegu",cursive;font-size:20px;line-height:1.4;transform:rotate(-1deg)}
+.back .ko{color:#7a6a55;font-family:inherit}
+.hint{margin-top:12px;font-size:13px;color:var(--red);text-align:center}
+/* coincidencias */
+.pair{display:grid;grid-template-columns:1fr 1.4fr;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.pl{border-right:1px dashed var(--line);padding-right:12px}
+.pdt{display:block;font-size:12px;color:var(--red);font-variant-numeric:tabular-nums}
+.pl b{display:block;font-size:15px;margin:4px 0 6px}
+.pl p{font-size:13px;color:var(--sub);line-height:1.6}
+.pims{display:grid;gap:6px}.pims.n2{grid-template-columns:1fr 1fr}
+.pims img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:zoom-in}
+.pr p{font-size:13px;line-height:1.6;margin-top:8px}
+@media(max-width:520px){.pair{grid-template-columns:1fr}.pl{border-right:0;border-bottom:1px dashed var(--line);padding:0 0 10px}}
+/* lightbox */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.lb.on{display:flex}
+.lb img{max-width:100%;max-height:100%;border-radius:8px}
+.foot{margin-top:34px;text-align:center;font-size:11px;color:#5b5b60;letter-spacing:1px}
+
+.card,.step,.pims{position:relative}
+.card::after,.pims::after,.step::after{content:"© 남주수용소 소장";position:absolute;right:8px;top:8px;font-size:10px;letter-spacing:.5px;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:2px 7px;border-radius:20px;pointer-events:none}
+.wm{text-align:center;font-size:11px;color:#6f6f75;margin:18px 0 6px;letter-spacing:.5px}
+.e2e{clear:both;margin:4px auto 10px;max-width:90%;text-align:center;font-size:11px;line-height:1.5;color:#d8c48a;background:#1e2318;border-radius:8px;padding:6px 10px}
+.lb::after{content:"© 남주수용소 소장 · 무단 복제·사용 금지";position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:12px;color:rgba(255,255,255,.7)}
+.top .by{margin-left:auto;font-size:10px;color:var(--sub);border:1px solid var(--line);border-radius:20px;padding:3px 9px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><rect x="13" y="12" width="6" height="5" rx="1"/><path d="M14.5 12v-1.2a1.5 1.5 0 0 1 3 0V12"/></svg>
+<div><h1>ARCHIVO PRIVADO</h1><p>TEODORO VARGAS · 개인 기록 보관함</p></div><span class="by">by 남주수용소 소장</span>
+</header>
+
+<section class="view on" id="home">
+<p class="wm" style="margin:12px 0 0">남주수용소 소장의 창작 플롯 《테오》 증거 아카이브</p>
+<nav class="list">
+<a class="row" href="#s1"><span class="ic">💬</span><div><b>Mensajes</b><span>라사와의 대화 · 사진 8장</span></div><span class="no">01</span></a>
+<a class="row" href="#s2"><span class="ic">🖼️</span><div><b>Galería familiar</b><span>비공개 가족 앨범 · 사진 12장</span></div><span class="no">02</span></a>
+<a class="row" href="#s3"><span class="ic">📁</span><div><b>Documentos</b><span>체류 및 입국 준비 자료 · 사진 5장</span></div><span class="no">03</span></a>
+<a class="row" href="#s4"><span class="ic">🏠</span><div><b>Mi vida en Corea</b><span>테오의 한국 생활 · 사진 5장</span></div><span class="no">04</span></a>
+<a class="row lock" href="#s5"><span class="ic">🔒</span><div><b>Archivo oculto</b><span>숨겨진 개인 자료 · 사진 5장</span></div><span class="no">05</span></a>
+<a class="row lock" href="#s6"><span class="ic">🔒</span><div><b>Coincidencias</b><span>날짜가 겹치는 증거 · 사진 5장</span></div><span class="no">06</span></a>
+</nav>
+</section>
+
+<section class="view" id="s1">
+<div class="vh"><button data-home>‹ 목록</button><h2>Mensajes</h2><small>01</small></div>
+<button class="trbtn" data-tr>번역 끄기</button>
+<div class="chat">
+<div class="chathead"><div class="av"><img src="https://i.postimg.cc/pV6sTm5L/7-Whats-App-cheombu-sajin-lasaui-yeongsangtonghwa-peulopil.png" alt=""></div><div><b>Lasa ❤️</b><span>+57 3•• ••• ••42</span></div></div>
+<div class="e2e">🔒 이 대화는 남주수용소 소장의 창작물입니다. 무단 복제·도용을 금합니다.</div>
+<div class="day">12 may 2025</div>
+<div class="msg me"><div class="es">Ya llegué. Cartagena sigue igual de caliente.</div><div class="ko">도착했어. 카르타헤나는 여전히 덥네.</div><span class="tm">09:40</span></div>
+<div class="msg me pic"><img class="ph" src="https://i.postimg.cc/h452jXQx/3-Whats-App-cheombu-sajin-te-oga-jjig-eun-kollombia-geoli.png" alt="" loading="lazy" data-zoom><span class="tm">09:41</span></div>
+<div class="msg you"><div class="es">¿Y ella qué cree?</div><div class="ko">그 여자는 뭐라고 알고 있어?</div><span class="tm">09:52</span></div>
+<div class="msg me"><div class="es">Viaje de negocios. Fincas de café. Sin señal.</div><div class="ko">출장. 커피 농장. 신호 안 터진다고 했어.</div><span class="tm">09:53</span></div>
+<div class="day">3 sep 2025</div>
+<div class="msg you pic"><img class="ph" src="https://i.postimg.cc/9XnLMDwP/1-Whats-App-cheombu-sajin-lasaui-achim-selka.png" alt="" loading="lazy" data-zoom><span class="tm">21:12</span></div>
+<div class="msg you"><div class="es">Buenos días, mi amor ☀️</div><div class="ko">좋은 아침, 내 사랑 ☀️</div><span class="tm">21:12</span></div>
+<div class="msg me"><div class="es">Aquí ya es de noche. Te extraño.</div><div class="ko">여긴 벌써 밤이야. 보고 싶어.</div><span class="tm">21:20</span></div>
+<div class="day">18 oct 2025</div>
+<div class="msg you pic"><img class="ph" src="https://i.postimg.cc/2jK061L7/2-Whats-App-cheombu-sajin-lasaui-geoul-selka.png" alt="" loading="lazy" data-zoom><span class="tm">23:05</span></div>
+<div class="msg you"><div class="es">¿Todavía te gusto? 😏</div><div class="ko">아직도 내가 좋아?</div><span class="tm">23:05</span></div>
+<div class="msg me"><div class="es">Siempre. Ten paciencia, Lasa. Falta poco.</div><div class="ko">항상. 조금만 참아, 라사. 얼마 안 남았어.</div><span class="tm">23:31</span></div>
+<div class="day">9 nov 2025</div>
+<div class="msg you pic"><img class="ph" src="https://i.postimg.cc/xj46CXNm/4-Whats-App-cheombu-sajin-lasaga-bonaen-jibbab-sajin.png" alt="" loading="lazy" data-zoom><span class="tm">08:10</span></div>
+<div class="msg you"><div class="es">Hice tu sancocho. Mateo dejó todo el pollo.</div><div class="ko">네가 좋아하는 산코초 했어. 마테오가 닭고기만 다 남겼어.</div><span class="tm">08:10</span></div>
+<div class="day">2 feb 2026</div>
+<div class="msg you pic"><img class="ph" src="https://i.postimg.cc/zDcxByHv/5-Whats-App-cheombu-sajin-adeul-ui-nagseo.png" alt="" loading="lazy" data-zoom><span class="tm">10:44</span></div>
+<div class="msg you"><div class="es">Mira lo que dibujó. Dice que eres tú en Corea.</div><div class="ko">이거 봐. 한국에 있는 아빠래.</div><span class="tm">10:44</span></div>
+<div class="msg me"><div class="es">Dile que papá lo guarda en la cartera.</div><div class="ko">아빠가 지갑에 넣어 둔다고 전해 줘.</div><span class="tm">10:58</span></div>
+<div class="day">21 mar 2026</div>
+<div class="msg me pic"><img class="ph" src="https://i.postimg.cc/G35X24T1/6-Whats-App-cheombu-sajin-te-oui-hangug-selka.png" alt="" loading="lazy" data-zoom><span class="tm">19:02</span></div>
+<div class="msg you"><div class="es">Mateo quiere saber si vas a estar el 14 de mayo.</div><div class="ko">마테오가 5월 14일에 아빠 오냐고 물어봐.</div><span class="tm">19:15</span></div>
+<div class="msg me"><div class="es">Este año no puedo. El próximo cumpleaños, en Seúl. Te lo prometo.</div><div class="ko">올해는 안 돼. 다음 생일은 서울에서. 약속해.</div><span class="tm">19:20</span></div>
+<div class="day">30 jun 2026</div>
+<div class="msg you pic"><img class="ph" src="https://i.postimg.cc/pV6sTm5L/7-Whats-App-cheombu-sajin-lasaui-yeongsangtonghwa-peulopil.png" alt="" loading="lazy" data-zoom><span class="tm">02:30</span></div>
+<div class="msg you"><div class="es">¿Hoy es el cumpleaños del otro niño?</div><div class="ko">오늘 그 애 생일이지?</div><span class="tm">02:30</span></div>
+<div class="msg me"><div class="es">No hablemos de eso.</div><div class="ko">그 얘기는 하지 말자.</div><span class="tm">02:47</span></div>
+<div class="day">29 oct 2026</div>
+<div class="msg me"><div class="es">Ya está. Residencia permanente. F-5.</div><div class="ko">끝났어. 영주권. F-5.</div><span class="tm">16:03</span></div>
+<div class="msg you"><div class="es">¡¡POR FIN!! 😭😭</div><div class="ko">드디어!! 😭😭</div><span class="tm">16:04</span></div>
+<div class="msg you pic"><img class="ph" src="https://i.postimg.cc/PfRSxCvt/8-Whats-App-cheombu-sajin-adeulgwa-lasaui-moseub.png" alt="" loading="lazy" data-zoom><span class="tm">16:06</span></div>
+<div class="msg you"><div class="es">Ya hice las maletas. ¿Y ella?</div><div class="ko">짐 다 쌌어. 그 여자는?</div><span class="tm">16:06</span></div>
+<div class="msg me"><div class="es">Se lo digo esta semana.</div><div class="ko">이번 주에 말할 거야.</div><span class="tm">16:20</span></div>
+<div class="msg you"><div class="es">¿Y el niño?</div><div class="ko">그 애는?</div><span class="tm">16:21</span></div>
+<div class="msg me"><div class="es">Eso lo veo después.</div><div class="ko">그건 나중에 생각할게.</div><span class="tm">16:40</span></div>
+<div class="day">2 nov 2026</div>
+<div class="msg you"><div class="es">¿Y? ¿Ya firmó?</div><div class="ko">그래서? 서명했어?</div><span class="tm">03:11</span></div>
+<div class="msg me"><div class="es">Todavía no. Pero va a firmar.</div><div class="ko">아직. 근데 할 거야.</div><span class="tm">14:52</span></div>
+<div class="msg you"><div class="es">¿Lloró?</div><div class="ko">울었어?</div><span class="tm">14:52</span></div>
+<div class="seen">읽음</div>
+</div>
+</section>
+
+<section class="view" id="s2">
+<div class="vh"><button data-home>‹ 목록</button><h2>Galería familiar</h2><small>02</small></div>
+<div class="grid"><figure class="card"><img class="ph" src="https://i.postimg.cc/6qyzcXg3/20-bigong-gae-gajog-aelbeom-olaedoen-aejeong-eolin-sajin.png" alt="" loading="lazy" data-zoom><figcaption><b>dic 2018</b><span class="es">La primera foto que guardé de nosotros.</span><span class="ko">처음으로 간직한 우리 사진.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/j2mck1Yk/9-bigong-gae-gajog-aelbeom-yeon-ae-chogi-keopeul-selka.png" alt="" loading="lazy" data-zoom><figcaption><b>mar 2019</b><span class="es">Lasa y yo. Antes de todo.</span><span class="ko">라사와 나. 모든 일이 있기 전.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/Bbkpwzfh/10-bigong-gae-gajog-aelbeom-kaleutahena-haebyeon-deiteu.png" alt="" loading="lazy" data-zoom><figcaption><b>ago 2019</b><span class="es">Bocagrande. Ella odiaba el sol, yo no.</span><span class="ko">보카그란데. 그녀는 햇볕을 싫어했다.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/KjwfsWhD/11-bigong-gae-gajog-aelbeom-lasaui-saeng-il.png" alt="" loading="lazy" data-zoom><figcaption><b>22 jul 2020</b><span class="es">Veinticinco años. Le prometí una casa.</span><span class="ko">스물다섯 번째 생일. 집을 약속했다.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/cC2h5zG7/12-bigong-gae-gajog-aelbeom-hamkke-yolihaneun-yeon-in.png" alt="" loading="lazy" data-zoom><figcaption><b>oct 2020</b><span class="es">Domingo. Arroz con coco.</span><span class="ko">일요일. 코코넛 밥.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/HnRzPN1y/13-bigong-gae-gajog-aelbeom-lasaui-imsin-sijeol.png" alt="" loading="lazy" data-zoom><figcaption><b>dic 2020</b><span class="es">Cinco meses.</span><span class="ko">임신 5개월.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/RhydbYxJ/14-bigong-gae-gajog-aelbeom-agi-chimdaewa-chulsan-junbi.png" alt="" loading="lazy" data-zoom><figcaption><b>abr 2021</b><span class="es">La cuna que armé con mis manos.</span><span class="ko">내 손으로 조립한 아기 침대.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/nrg2wWfs/15-bigong-gae-gajog-aelbeom-sinsaeng-aleul-an-eun-te-o.png" alt="" loading="lazy" data-zoom><figcaption><b>14 may 2021</b><span class="es">Mateo. 2,9 kg. Mi vida entera.</span><span class="ko">마테오. 2.9kg. 내 인생 전부.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/x8h5FZVq/16-bigong-gae-gajog-aelbeom-adeulgwa-te-oui-selka.png" alt="" loading="lazy" data-zoom><figcaption><b>nov 2021</b><span class="es">Otra revisión en el hospital. Ya se sabe el nombre de cada enfermera.</span><span class="ko">또 병원 정기검진. 간호사 이름을 이제 다 안다.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/4yqPF0RN/17-bigong-gae-gajog-aelbeom-adeul-ui-cheosgeol-eum-mulyeob.png" alt="" loading="lazy" data-zoom><figcaption><b>may 2022</b><span class="es">Sus primeros pasos. Yo estaba en Seúl, conociendo a la familia de ella. Video de Lasa.</span><span class="ko">첫걸음. 나는 서울에 있었다. 그 여자의 가족을 만나러. 라사가 보낸 영상.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/d3Ln6YpZ/18-bigong-gae-gajog-aelbeom-se-salam-ui-gajogsajin.png" alt="" loading="lazy" data-zoom><figcaption><b>ene 2023</b><span class="es">Los tres. Dos meses antes de la boda.</span><span class="ko">우리 셋. 결혼식 두 달 전.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/QCHSm3wF/19-bigong-gae-gajog-aelbeom-adeul-ui-saeng-ilpati.png" alt="" loading="lazy" data-zoom><figcaption><b>14 may 2025</b><span class="es">Cuatro años. Viaje de negocios.</span><span class="ko">네 살. 출장.</span></figcaption></figure></div>
+<div class="wm">ARCHIVO PRIVADO · © 남주수용소 소장</div>
+</section>
+
+<section class="view" id="s3">
+<div class="vh"><button data-home>‹ 목록</button><h2>Documentos</h2><small>03</small></div>
+<div class="cd"><b id="dday">D-46</b><span>Vuelo BOG → ICN · 2026.12.18 · 라사와 마테오 입국까지 · 마지막 기록 2026.11.02</span></div>
+<ul class="plan"><li class="done"><i>✓</i><span class="pd">08.03.2023</span><span><b class="es">Registro de matrimonio</b><span class="ko">혼인신고</span></span></li>
+<li class="done"><i>✓</i><span class="pd">20.05.2023</span><span><b class="es">Entrada a Corea · F-6</b><span class="ko">한국 입국 · F-6</span></span></li>
+<li class="done"><i>✓</i><span class="pd">30.06.2024</span><span><b class="es">Nació Ian</b><span class="ko">이안 출생</span></span></li>
+<li class="done"><i>✓</i><span class="pd">29.10.2026</span><span><b class="es">Residencia permanente · F-5</b><span class="ko">영주자격 · F-5</span></span></li>
+<li class="done"><i>✓</i><span class="pd">01.11.2026</span><span><b class="es">Hablar con ella</b><span class="ko">그 여자에게 말하기</span></span></li>
+<li class=""><i></i><span class="pd">18.12.2026</span><span><b class="es">Vuelo BOG → ICN · Lasa y Mateo</b><span class="ko">보고타 → 인천 · 라사와 마테오</span></span></li>
+<li class=""><i></i><span class="pd">01.2027</span><span><b class="es">Evaluación de trasplante · Seúl</b><span class="ko">이식 평가 · 서울</span></span></li></ul>
+<div class="grid"><figure class="card"><div class="ov"><img class="ph" src="https://i.postimg.cc/C5zJ7gXx/21-chelyu-ibgug-junbi-sajin-yeogwongwa-seolyu-bongtu.png" alt="" loading="lazy" data-zoom></div><figcaption><span class="es">Pasaportes. Sobre amarillo, cajón de abajo.</span><span class="ko">여권. 노란 봉투, 맨 아래 서랍.</span></figcaption></figure>
+<figure class="card"><div class="ov"><img class="ph" src="https://i.postimg.cc/SRJVdh3q/22-chelyu-ibgug-junbi-sajin-lasawa-adeul-ui-yeohaeng-gabang.png" alt="" loading="lazy" data-zoom></div><figcaption><span class="es">Las maletas de Lasa. Dos grandes, una pequeña.</span><span class="ko">라사의 가방. 큰 것 둘, 작은 것 하나.</span></figcaption></figure>
+<figure class="card"><div class="ov"><img class="ph" src="https://i.postimg.cc/5y6pgVTV/23-chelyu-ibgug-junbi-sajin-hangug-eo-gongbu-noteu.png" alt="" loading="lazy" data-zoom><div class="note23"><span>안녕하세요</span><span>감사합니다</span><span>아빠 어디 있어요?</span><span>병원은 어디예요?</span></div></div><figcaption><span class="es">El cuaderno de coreano de Lasa.</span><span class="ko">라사의 한국어 공부 노트.</span></figcaption></figure>
+<figure class="card"><div class="ov"><img class="ph" src="https://i.postimg.cc/j2Lvcb9G/24-chelyu-ibgug-junbi-sajin-hangug-sugso-huboleul-salpyeoboneun-chaegsang.png" alt="" loading="lazy" data-zoom></div><figcaption><span class="es">Departamentos en Itaewon. El segundo.</span><span class="ko">이태원 집 후보. 두 번째로.</span></figcaption></figure>
+<figure class="card"><div class="ov"><img class="ph" src="https://i.postimg.cc/BbXNp0yy/25-chelyu-ibgug-junbi-sajin-kollombia-gonghang-ui-gwageo-yeohaeng-sajin.png" alt="" loading="lazy" data-zoom></div><figcaption><span class="es">Aeropuerto Rafael Núñez, mayo 2025.</span><span class="ko">라파엘 누녜스 공항, 2025년 5월.</span></figcaption></figure></div>
+<div class="wm">ARCHIVO PRIVADO · © 남주수용소 소장</div>
+</section>
+
+<section class="view" id="s4">
+<div class="vh"><button data-home>‹ 목록</button><h2>Mi vida en Corea</h2><small>04</small></div>
+<div class="grid"><figure class="card"><img class="ph" src="https://i.postimg.cc/bJ631JCP/26-te-oui-hangug-saenghwal-hangug-jib-eseo-jjig-eun-te-o-selka.png" alt="" loading="lazy" data-zoom><figcaption><b>Mangwon-dong</b><span class="es">La casa de ella. Mi casa, por ahora.</span><span class="ko">그 여자의 집. 지금은 내 집.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/ZRfV6RfM/27-te-oui-hangug-saenghwal-te-oui-hangug-jag-eob-gong-gan.png" alt="" loading="lazy" data-zoom><figcaption><b>Seongsu</b><span class="es">Vargas Trading. Todo empieza aquí.</span><span class="ko">바르가스 트레이딩. 모든 게 여기서 시작된다.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/cHDXfH9S/28-te-oui-hangug-saenghwal-hangug-kapeeseoui-ilsang.png" alt="" loading="lazy" data-zoom><figcaption><b>Seúl</b><span class="es">Aquí nadie sabe quién soy. Me gusta.</span><span class="ko">여기선 아무도 내가 누군지 모른다. 그게 좋다.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/NMNpRMNZ/29-te-oui-hangug-saenghwal-gyeolhonbanjiga-boineun-son.png" alt="" loading="lazy" data-zoom><figcaption><b>Anillo</b><span class="es">No pesa nada.</span><span class="ko">반지. 아무 무게도 없다.</span></figcaption></figure>
+<figure class="card"><img class="ph" src="https://i.postimg.cc/Px621x66/30-te-oui-hangug-saenghwal-te-oui-gaein-seolab.png" alt="" loading="lazy" data-zoom><figcaption><b>Cajón</b><span class="es">Lo que ella nunca abre.</span><span class="ko">그 여자가 절대 열지 않는 것.</span></figcaption></figure></div>
+<div class="wm">ARCHIVO PRIVADO · © 남주수용소 소장</div>
+</section>
+
+<section class="view" id="s5">
+<div class="vh"><button data-home>‹ 목록</button><h2>Archivo oculto</h2><small>05</small></div>
+<div class="lockbox" data-lock="s5"><div class="lk">🔒</div><p>월·일 숫자 4자리.<br>그가 절대 잊지 않는 날.</p><form><input type="password" inputmode="numeric" maxlength="4" aria-label="비밀번호"><button>열기</button></form><div class="err"></div></div>
+<div class="sealed"></div>
+</section>
+
+<section class="view" id="s6">
+<div class="vh"><button data-home>‹ 목록</button><h2>Coincidencias</h2><small>06</small></div>
+<div class="lockbox" data-lock="s6"><div class="lk">🔒</div><p>월·일 숫자 4자리.<br>모든 것이 시작된 날.</p><form><input type="password" inputmode="numeric" maxlength="4" aria-label="비밀번호"><button>열기</button></form><div class="err"></div></div>
+<div class="sealed"></div>
+</section>
+
+<div class="foot">© 남주수용소 소장 · 무단 복제·사용 금지 · 이 기록은 창작물입니다</div>
+</div>
+
+<div class="lb" id="lb"><img alt=""></div>
+
+<script>
+const SEAL = {"s5":{"s":"4Q9oNMSwyDSP9Wh3idT14A==","i":"EeSoyVKm8cE5yOxm","c":"lKL7R3LIDIgKoRTQT+TPXJLxxPgt1dmqwJcZf665H8XoVawB35KAdwoGXZ4hMWhVl4kp7asQCPw55qb0NhU/gvZZ0+yhpo58S88r7Rd2bayOFHel/yH0CIVguTQxtURQureSsLX3BJyWczHA/Pl6NDwtAYdC2V4s2uBZB9uMvgFmwSrUasKCQtElyXy2qVRZtg2Hro6DmJSq29xWMa3GAGalnxwXHxlF9vz05bETWU84qR2j00IWQcBSyPpZH6QLWgYh5lgbd3/9KBOz7cWYvsS6tgYineB5SIM2Z73Q5U8JqTSchGFKuPxdMXltWTkVkvyjiSNWaJizB3aJbHLKVZR2Ios75UGYJT9WjY+ZZsnFumgjG6oCCI5mYQqQS/e9S79bTXk2eCmD+hSIVrSMFjFLVEtkt1vIWrcFYb87n0D5evDtddBfkZxbd6ccVH2OPLIT7nWrZW+wrTY3EPF1w4D3Wozju1SGj3nyiJ+KhWZjYNsXQllXHh3xq5scFu7MMqRC792JY4xrxj3o0TASJ4pEvJeqMphHrKxvx+YkMUGTwFbU1Ffx4Cs9j6k1cZ98EbQSCBxr0fvGk/wXloHazdiqJhJ2iNRh8bqlkD+CAGYcdmQRYkADPIq0fMzhkeuEhu3ys0uExMtScHO32PwYR6bo4GFRe1yOArSGw3O+zX4XgKtK4gvxHo2RCVlnwTshuDN61Q0UcljU3cSrk539ikyJosus+YNTJqQAMgu2vTmsr8A9DRUavkVHi0RynEhVS1cmG+40LKx+RuF+0tLA9jU0ppU46tBXzzHFLtAgClPlUjgH++Cd0Q7RlWQmxA63riKjch+hoy+yu0ygXMyyUYY3nhsRdmkm3xFkCwji1dKKSNXaOnumDSdjPRbczx565d/a22HBIaMx9UhyBjVyFwwPQx0+cPvlxhY2PwMFPzdyop0BQecZgk2YCmdtBXEEwY9Ya856TsBkmDFoFMqvWTE5RnJLoaUdAdlDCGI0e5qtk+hWfh/AFOIXSm6EGpiV1731qzlUV6cqnT8vH7g0WZ0oRNdi/r5fK7xo5G2LEYhFHeXOfuA4iwpDxHG+YJOEcmV7CLcqw5G/MfUWVBJDcDbvvjT2XhomjsQ6wl+lRJbyro8z8sahluKT+SO6ChEQvXrIGJahVKI2avnmCilfhFPmnnUUMlgytiwJXWvWnjLP4dF7iVS62UEeIrXMPluQPZ1yxf/6o0Lbv34tJiCbacYAqhJyFDnQ+A3B3Ssb/RM1db7O+jX9EMdRoNbGcgw/GJZA5v2XNVhPpTUF4szqE0n1E8nb0SCpswDIK20XZ4dPEEeHEpuaSCGTn/JHPwCYzSOdo7V0g80B92n1MYRN90volLTEapbHFjGl+IpQoCsqwBE3+uS/aZsdpVSWEnwjVeiEhTnSc+UP2r2cdEu5OM7zQFAms2NsQ0XChGNk7n+x10N2/zG0dMbJ5lA6pWzXRndk7qzGGB9SoG0hw0Uz0R9kTGwzRSBEy33Bkc5FucZAmQRX8mkV4wmPMime/B/F8WQwN+D+FdjAQiWH2W1K9Xf0/C1/CelvGLCEKX9/t88blp3QA3/tIPSmwK/vp3qDwHFX1uGefZyCDyiJAf5cleJw9bpyymu4izGorlhJyq/68tueHV93e2EKaOrTQBN762n0jHKGyB0GHsYX1rx0lsnZsDzdrhsE+rR218dBhuVT8Wx3B6NmPiBG+p7SorgAkZqC2ko0tCjuPkWiJwaBC8k9H9gFaHj6jQCd4zfPt7PtOrlBRilGt6UNilN7Vn5k7Ma4RYBLP9aYBJKl1x9zy2DPi47PaUlIDXmJOb285/22IdgkKu7rh8eWXHOCGPlIUvdgTBq67sHotIavP7oiLSSA3y0aw9bGUYSaCoAxWTI3W5TCd1vq2XgwMcDzLzL4fa+Ycz47BT3KOQ/Z2NrTNTUdkU1XYLq+TaYT1XXPKZ/+B/KZLpZlIadVYbvam54m2aPmMUqmJtV7PZceW0aHNZiaDU56J29pflrTke+vvZsMoMz0JD+VYz8QBdm3d/SblQ2rCCe9okAMEe246ytK1VeHICQ6wY9YRn+GCqiLdXob6WfG1d75Rz1KZ9USYF93BhLn4AAGaRP4UxFKW0wU31q/UT/m7eDpJ9/IOfFviV70GInYayBPKFq+J1LyzW5vQgdbBryWPCuogiOHlHzXHKOiR/rgKLiMuqvd7GC6630f248XJ0Ca6JyA0nVt6kkSy2xWeJSF2+ydl5HEmftgnKoRy04/kwma8KsmGuK8keAQ6YPhFwcqY8mfRBdN+m3r/JX0E6ICyx7rlfV/iLEr+4wGqcI+gMm/TbUFF6oEvQhjdGn5OsW4kpZpI+OqYrmZVLwGblRBKPbNZTEjxdLlNDjSqjqRbtaJ6FX5a6Xkas+ROQ6QnYtgQdR6EOUGbcFWd3RMlyTyMcqbahovnr04GCwL0dmIfeGEZp47wZOLxfGWYb2H8OP5pF31ht5o8M2/SPdJTLQ1QKtIaXKQuBKmXxmOL4cs8YyhtBt7epNmHVoeS2RE5f3vf5af8grHaFaaubKbllOpMs93iSJA+Y4jZ/S+3IZdF7Fu4/NU/amncsDVNoMJUH4uqvku364xNM6ObA13pScTVG6m0Vnpkt+6rX7Ynp1BRls5eLWKrJY8q9CxULsFKmP+S+wqfSw1esMF9b1U5DPBVKwu9jNJS92jr/2hQLWghMxXlNJ2YWLOQGRtDc3hZ8CnrRQUHfNlrzJfQMcJFLGvcFYwG5+TOzZFlUvEVPt4h8emwNpR7PHrlNX84IqpqsaDkOxpyT+0e1H9XpW2EPNBb66H5hn0rg1ygHxY+nDfiMWGK1Jz600ztbxE2d2wQ63+L71WLMvPTAFByR0oNPrxoEWjwLd7ZXNfIxl2RDJq2j7c6uXUrB0y/Y0wNaQHR0ikOzkWB8D2mGMe6sK0cMy9nMytMmat+8ZifGDvPOuNmLMzmObltuy0OuwtrwVSnxZNF2dUSfC/LZ3FrJj9MwmvYljardWeA0TA7Qq9+qGdr7nLx9HYHvXvXI753of7RgK+18Osnos4UkkXbt+2b09NcRuoJXUDf7xQYKV4CnJfvhm6Lau5qJRlJNMV9ElGZGIKzKfZeRVizU52zJeJ82zYSDA91Ys6pbewzujI4pYqhQ19DGPMqV2osKl+CPeriF6TGkKN52Ijqz20GfK0Sjvg7+A4rEUQ49RXhZo68WmVD6WTt3MFaq+iU0Awet56Fn2HYMFWlK4keGxlXL2vYizByGCp0cXLS+vO9x4="},"s6":{"s":"CRs+YLHM5ArIvPaP7YGTDA==","i":"Y0z1DKCNcA1m+xUT","c":"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"}};
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function unseal(e,pw){const k0=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);const k=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(e.s),iterations:200000,hash:"SHA-256"},k0,{name:"AES-GCM",length:256},false,["decrypt"]);return new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(e.i)},k,b64(e.c)));}
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));window.scrollTo(0,0);}
+function route(){const h=location.hash.slice(1);show(document.getElementById(h)?h:'home');}
+window.addEventListener('hashchange',route);route();
+document.querySelectorAll('[data-home]').forEach(b=>b.onclick=()=>{location.hash='';});
+document.querySelectorAll('[data-tr]').forEach(b=>b.onclick=()=>{document.body.classList.toggle('notr');b.textContent=document.body.classList.contains('notr')?'번역 보기':'번역 끄기';});
+const lb=document.getElementById('lb');
+document.addEventListener('click',e=>{const t=e.target;if(t.matches('img[data-zoom]')){lb.querySelector('img').src=t.src;lb.classList.add('on');}else if(t.closest('#lb'))lb.classList.remove('on');
+ if(t.matches('.next')){const n=t.dataset.go;const s=t.closest('.chain').querySelector('[data-step="'+n+'"]');s.classList.add('on');t.remove();s.scrollIntoView({behavior:'smooth',block:'start'});}});
+document.querySelectorAll('[data-lock]').forEach(box=>{
+ const key=box.dataset.lock,form=box.querySelector('form'),inp=box.querySelector('input'),err=box.querySelector('.err');
+ form.onsubmit=async e=>{e.preventDefault();if(!/^\d{4}$/.test(inp.value)){err.textContent='숫자 4자리.';return;}
+  try{const h=await unseal(SEAL[key],inp.value);box.remove();const s=document.querySelector('#'+key+' .sealed');s.innerHTML=h;s.querySelectorAll('.step,.card,.pair').forEach(x=>x.style.animation='fade .5s ease');}
+  catch(_){err.textContent='열리지 않는다.';form.classList.remove('shake');void form.offsetWidth;form.classList.add('shake');inp.value='';}};});
+
+</script>
+</body>
+</html>
